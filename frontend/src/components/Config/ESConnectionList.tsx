@@ -1,6 +1,6 @@
 'use client';
 
-import { List, Card, Button, Tag, Space, Popconfirm, message, Spin } from 'antd';
+import { List, Card, Button, Tag, Space, Popconfirm, App } from 'antd';
 import { DeleteOutlined, CheckCircleOutlined, ApiOutlined, EditOutlined } from '@ant-design/icons';
 import { useAppStore, ESConnectionConfig } from '@/stores/useAppStore';
 import { testESConnection } from '@/lib/api/esConnection';
@@ -11,20 +11,53 @@ interface ESConnectionListProps {
 }
 
 export default function ESConnectionList({ onEdit }: ESConnectionListProps) {
+  const { message } = App.useApp();
   const { esConnections, activeConnectionId, setActiveConnection, removeConnection } = useAppStore();
   const [testingId, setTestingId] = useState<string | null>(null);
 
   const handleTest = async (config: ESConnectionConfig) => {
     setTestingId(config.id);
+
+    // 显示测试中的提示
+    const hideLoading = message.loading('正在测试连接...', 0);
+
     try {
       const result = await testESConnection(config);
+      hideLoading();
+
       if (result.success) {
-        message.success(`连接成功！集群: ${result.clusterName}, 版本: ${result.version}`);
+        message.success({
+          content: (
+            <div>
+              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>✅ 连接成功！</div>
+              <div>集群名称: {result.clusterName}</div>
+              <div>ES 版本: {result.version}</div>
+            </div>
+          ),
+          duration: 5,
+        });
       } else {
-        message.error(`连接失败: ${result.error || result.message}`);
+        message.error({
+          content: (
+            <div>
+              <div style={{ fontWeight: 'bold', marginBottom: 4 }}>❌ 连接失败</div>
+              <div style={{ fontSize: '12px' }}>错误信息: {result.error || result.message}</div>
+            </div>
+          ),
+          duration: 8,
+        });
       }
-    } catch (error) {
-      message.error('测试连接时发生错误');
+    } catch (error: any) {
+      hideLoading();
+      message.error({
+        content: (
+          <div>
+            <div style={{ fontWeight: 'bold', marginBottom: 4 }}>❌ 测试连接时发生错误</div>
+            <div style={{ fontSize: '12px' }}>{error.message || '未知错误'}</div>
+          </div>
+        ),
+        duration: 8,
+      });
     } finally {
       setTestingId(null);
     }

@@ -99,12 +99,56 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 1
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionList.tsx",
+      "timestamp": 1762270727885,
+      "startOffset": 787,
+      "endOffset": 1937,
+      "codeContent": "\n    // 显示测试中的提示\n    const hideLoading \u003d message.loading(\u0027正在测试连接...\u0027, 0);\n\n    try {\n      const result \u003d await testESConnection(config);\n      hideLoading();\n\n      if (result.success) {\n        message.success({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e✅ 连接成功！\u003c/div\u003e\n              \u003cdiv\u003e集群名称: {result.clusterName}\u003c/div\u003e\n              \u003cdiv\u003eES 版本: {result.version}\u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 5,\n        });\n      } else {\n        message.error({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 连接失败\u003c/div\u003e\n              \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e错误信息: {result.error || result.message}\u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 8,\n        });\n      }\n    } catch (error: any) {\n      hideLoading();\n      message.error({\n        content: (\n          \u003cdiv\u003e\n            \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 测试连接时发生错误\u003c/div\u003e\n            \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e{error.message || \u0027未知错误\u0027}\u003c/div\u003e\n          \u003c/div\u003e\n        ),\n        duration: 8,\n      }",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 41
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionForm.tsx",
+      "timestamp": 1762270742914,
+      "startOffset": 218,
+      "endOffset": 692,
+      "codeContent": ", useState } from \u0027react\u0027;\nimport { testESConnection } from \u0027@/lib/api/esConnection\u0027;\n\ninterface ESConnectionFormProps {\n  onSuccess?: () \u003d\u003e void;\n  editingConfig?: ESConnectionConfig | null;\n  onCancelEdit?: () \u003d\u003e void;\n}\n\nexport default function ESConnectionForm({ onSuccess, editingConfig, onCancelEdit }: ESConnectionFormProps) {\n  const [form] \u003d Form.useForm();\n  const { addConnection, updateConnection } \u003d useAppStore();\n  const [testing, setTesting] \u003d useState(false",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 13
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionForm.tsx",
+      "timestamp": 1762270772947,
+      "startOffset": 2177,
+      "endOffset": 4301,
+      "codeContent": "const handleTestConnection \u003d async () \u003d\u003e {\n    try {\n      // 验证表单\n      await form.validateFields();\n      const values \u003d form.getFieldsValue();\n\n      setTesting(true);\n      const hideLoading \u003d message.loading(\u0027正在测试连接...\u0027, 0);\n\n      // 构建临时配置用于测试\n      const testConfig: ESConnectionConfig \u003d {\n        id: editingConfig?.id || \u0027temp\u0027,\n        name: values.name,\n        host: values.host,\n        port: values.port,\n        scheme: values.scheme,\n        username: values.username,\n        password: values.password,\n        environment: values.environment,\n        createdAt: editingConfig?.createdAt || new Date().toISOString(),\n      };\n\n      const result \u003d await testESConnection(testConfig);\n      hideLoading();\n\n      if (result.success) {\n        message.success({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e✅ 连接测试成功！\u003c/div\u003e\n              \u003cdiv\u003e集群名称: {result.clusterName}\u003c/div\u003e\n              \u003cdiv\u003eES 版本: {result.version}\u003c/div\u003e\n              \u003cdiv style\u003d{{ marginTop: 4, fontSize: \u002712px\u0027, color: \u0027#52c41a\u0027 }}\u003e\n                配置正确，可以保存使用\n              \u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 5,\n        });\n      } else {\n        message.error({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 连接测试失败\u003c/div\u003e\n              \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e错误信息: {result.error || result.message}\u003c/div\u003e\n              \u003cdiv style\u003d{{ marginTop: 4, fontSize: \u002712px\u0027, color: \u0027#ff4d4f\u0027 }}\u003e\n                请检查配置后重试\n              \u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 8,\n        });\n      }\n    } catch (error: any) {\n      if (error.errorFields) {\n        message.warning(\u0027请先填写完整的配置信息\u0027);\n      } else {\n        message.error({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 测试连接时发生错误\u003c/div\u003e\n              \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e{error.message || \u0027未知错误\u0027}\u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 8,\n        });\n      }\n    } finally {\n      setTesting(false);\n    }\n  };\n\n  ",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 73
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionForm.tsx",
+      "timestamp": 1762270787969,
+      "startOffset": 5907,
+      "endOffset": 6522,
+      "codeContent": ", flexDirection: \u0027column\u0027 }}\u003e\n          \u003cButton\n            type\u003d\"default\"\n            onClick\u003d{handleTestConnection}\n            loading\u003d{testing}\n            block\n          \u003e\n            {testing ? \u0027测试中...\u0027 : \u0027🔍 测试连接\u0027}\n          \u003c/Button\u003e\n          \u003cdiv style\u003d{{ display: \u0027flex\u0027, gap: \u00278px\u0027 }}\u003e\n            \u003cButton type\u003d\"primary\" htmlType\u003d\"submit\" style\u003d{{ flex: 1 }}\u003e\n              {editingConfig ? \u0027更新配置\u0027 : \u0027添加配置\u0027}\n            \u003c/Button\u003e\n            {editingConfig \u0026\u0026 (\n              \u003cButton onClick\u003d{handleCancel} style\u003d{{ flex: 1 }}\u003e\n                取消\n              \u003c/Button\u003e\n            )}\n          \u003c/div\u003e",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 19
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 9,
-      "totalLines": 785
+      "usageCount": 13,
+      "totalLines": 931
     }
   }
 }
