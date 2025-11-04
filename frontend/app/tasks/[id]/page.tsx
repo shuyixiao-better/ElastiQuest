@@ -26,20 +26,24 @@ import { useRouter } from 'next/navigation';
 import { tasks } from '@/data/tasks';
 import { useAppStore } from '@/stores/useAppStore';
 import SmartCodeEditor from '@/components/CodeEditor/SmartCodeEditor';
+import { executeESCommand } from '@/lib/api/esExecution';
+import { validateTaskCompletion } from '@/lib/taskValidator';
 
 const { Title, Paragraph, Text } = Typography;
 
 export default function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { gamification, completeTask } = useAppStore();
+  const { gamification, completeTask, esConnections, activeConnectionId } = useAppStore();
   const [code, setCode] = useState('');
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [showHints, setShowHints] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
+  const [taskPassed, setTaskPassed] = useState(false);
 
   const task = tasks.find(t => t.id === resolvedParams.id);
+  const activeConnection = esConnections.find(c => c.id === activeConnectionId);
   
   if (!task) {
     return (
@@ -60,25 +64,66 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
 
   const handleExecute = async () => {
     if (!code.trim()) {
-      message.warning('请输入要执行的代码');
+      message.warning('请输入要执行的魔法咒语');
+      return;
+    }
+
+    if (!activeConnection) {
+      message.error('请先配置 ES 连接');
       return;
     }
 
     setLoading(true);
-    
-    // 模拟执行（实际项目中这里会调用后端 API）
-    setTimeout(() => {
+    setTaskPassed(false);
+
+    try {
+      // 调用后端执行 ES 命令
+      const hideLoading = message.loading('正在施展魔法咒语...', 0);
+      const executionResult = await executeESCommand(code, activeConnection);
+      hideLoading();
+
+      if (executionResult.success) {
+        // 验证任务是否完成
+        const validation = validateTaskCompletion(task!, executionResult);
+
+        setResult({
+          success: true,
+          statusCode: executionResult.statusCode,
+          responseBody: executionResult.responseBody,
+          validation: validation,
+        });
+
+        if (validation.passed) {
+          setTaskPassed(true);
+          message.success({
+            content: validation.message,
+            duration: 3,
+          });
+        } else {
+          message.warning({
+            content: validation.message,
+            duration: 5,
+          });
+        }
+      } else {
+        setResult({
+          success: false,
+          error: executionResult.error,
+        });
+        message.error({
+          content: `❌ 咒语施展失败：${executionResult.error}`,
+          duration: 5,
+        });
+      }
+    } catch (error: any) {
+      message.error('执行时发生错误：' + error.message);
       setResult({
-        success: true,
-        message: '执行成功！',
-        data: {
-          acknowledged: true,
-          index: 'my_first_index',
-        },
+        success: false,
+        error: error.message,
       });
+    } finally {
       setLoading(false);
-      message.success('代码执行成功！');
-    }, 1000);
+    }
   };
 
   const handleComplete = () => {
@@ -256,39 +301,89 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
             </div>
 
             <div style={{ display: 'flex', gap: 8 }}>
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 icon={<PlayCircleOutlined />}
                 onClick={handleExecute}
                 loading={loading}
                 size="large"
+                disabled={!activeConnection}
               >
-                执行代码
+                {loading ? '施展中...' : '✨ 施展魔法'}
               </Button>
-              {result?.success && !isCompleted && (
-                <Button 
+              {taskPassed && !isCompleted && (
+                <Button
                   type="primary"
                   style={{ background: '#52c41a', borderColor: '#52c41a' }}
                   icon={<CheckCircleOutlined />}
                   onClick={handleComplete}
                   size="large"
                 >
-                  完成任务
+                  🎉 完成任务
                 </Button>
               )}
             </div>
 
+            {!activeConnection && (
+              <Alert
+                message="⚠️ 需要配置 ES 连接"
+                description={
+                  <span>
+                    请先 <Link href="/config" style={{ fontWeight: 'bold' }}>配置 ES 连接</Link> 才能执行任务
+                  </span>
+                }
+                type="warning"
+                showIcon
+              />
+            )}
+
             {result && (
               <Alert
-                message={result.success ? '✅ 执行成功' : '❌ 执行失败'}
-                description={
-                  <pre style={{ margin: 0 }}>
-                    {JSON.stringify(result, null, 2)}
-                  </pre>
+                message={
+                  result.success
+                    ? (result.validation?.passed ? '✅ 任务验证通过！' : '⚠️ 执行成功，但未满足任务要求')
+                    : '❌ 执行失败'
                 }
-                type={result.success ? 'success' : 'error'}
+                description={
+                  <div>
+                    {result.validation && (
+                      <div style={{ marginBottom: 12, fontSize: 14 }}>
+                        {result.validation.message}
+                      </div>
+                    )}
+                    {result.success ? (
+                      <details>
+                        <summary style={{ cursor: 'pointer', marginBottom: 8 }}>
+                          查看响应详情（状态码: {result.statusCode}）
+                        </summary>
+                        <pre style={{
+                          margin: 0,
+                          background: '#f5f5f5',
+                          padding: 12,
+                          borderRadius: 4,
+                          maxHeight: 300,
+                          overflow: 'auto',
+                        }}>
+                          {result.responseBody}
+                        </pre>
+                      </details>
+                    ) : (
+                      <div style={{ color: '#ff4d4f' }}>
+                        错误信息: {result.error}
+                      </div>
+                    )}
+                  </div>
+                }
+                type={
+                  result.success
+                    ? (result.validation?.passed ? 'success' : 'warning')
+                    : 'error'
+                }
                 closable
-                onClose={() => setResult(null)}
+                onClose={() => {
+                  setResult(null);
+                  setTaskPassed(false);
+                }}
               />
             )}
           </Space>

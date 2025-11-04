@@ -176,12 +176,56 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 59
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273269570,
+      "startOffset": 567,
+      "endOffset": 687,
+      "codeContent": "import { executeESCommand } from \u0027@/lib/api/esExecution\u0027;\nimport { validateTaskCompletion } from \u0027@/lib/taskValidator\u0027;\n",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 3
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273299631,
+      "startOffset": 1982,
+      "endOffset": 3414,
+      "codeContent": "魔法咒语\u0027);\n      return;\n    }\n\n    if (!activeConnection) {\n      message.error(\u0027请先配置 ES 连接\u0027);\n      return;\n    }\n\n    setLoading(true);\n    setTaskPassed(false);\n\n    try {\n      // 调用后端执行 ES 命令\n      const hideLoading \u003d message.loading(\u0027正在施展魔法咒语...\u0027, 0);\n      const executionResult \u003d await executeESCommand(code, activeConnection);\n      hideLoading();\n\n      if (executionResult.success) {\n        // 验证任务是否完成\n        const validation \u003d validateTaskCompletion(task!, executionResult);\n\n        setResult({\n          success: true,\n          statusCode: executionResult.statusCode,\n          responseBody: executionResult.responseBody,\n          validation: validation,\n        });\n\n        if (validation.passed) {\n          setTaskPassed(true);\n          message.success({\n            content: validation.message,\n            duration: 3,\n          });\n        } else {\n          message.warning({\n            content: validation.message,\n            duration: 5,\n          });\n        }\n      } else {\n        setResult({\n          success: false,\n          error: executionResult.error,\n        });\n        message.error({\n          content: `❌ 咒语施展失败：${executionResult.error}`,\n          duration: 5,\n        });\n      }\n    } catch (error: any) {\n      message.error(\u0027执行时发生错误：\u0027 + error.message);\n      setResult({\n        success: false,\n        error: error.message,\n      });\n    } finally {\n      setLoading(false);\n    }",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 60
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273314651,
+      "startOffset": 8637,
+      "endOffset": 9742,
+      "codeContent": "\n                type\u003d\"primary\"\n                icon\u003d{\u003cPlayCircleOutlined /\u003e}\n                onClick\u003d{handleExecute}\n                loading\u003d{loading}\n                size\u003d\"large\"\n                disabled\u003d{!activeConnection}\n              \u003e\n                {loading ? \u0027施展中...\u0027 : \u0027✨ 施展魔法\u0027}\n              \u003c/Button\u003e\n              {taskPassed \u0026\u0026 !isCompleted \u0026\u0026 (\n                \u003cButton\n                  type\u003d\"primary\"\n                  style\u003d{{ background: \u0027#52c41a\u0027, borderColor: \u0027#52c41a\u0027 }}\n                  icon\u003d{\u003cCheckCircleOutlined /\u003e}\n                  onClick\u003d{handleComplete}\n                  size\u003d\"large\"\n                \u003e\n                  🎉 完成任务\n                \u003c/Button\u003e\n              )}\n            \u003c/div\u003e\n\n            {!activeConnection \u0026\u0026 (\n              \u003cAlert\n                message\u003d\"⚠️ 需要配置 ES 连接\"\n                description\u003d{\n                  \u003cspan\u003e\n                    请先 \u003cLink href\u003d\"/config\" style\u003d{{ fontWeight: \u0027bold\u0027 }}\u003e配置 ES 连接\u003c/Link\u003e 才能执行任务\n                  \u003c/span\u003e\n                }\n                type\u003d\"warning\"\n                showIcon\n              /\u003e\n            )}",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 35
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273344680,
+      "startOffset": 9815,
+      "endOffset": 11486,
+      "codeContent": "\n                  result.success\n                    ? (result.validation?.passed ? \u0027✅ 任务验证通过！\u0027 : \u0027⚠️ 执行成功，但未满足任务要求\u0027)\n                    : \u0027❌ 执行失败\u0027\n                }\n                description\u003d{\n                  \u003cdiv\u003e\n                    {result.validation \u0026\u0026 (\n                      \u003cdiv style\u003d{{ marginBottom: 12, fontSize: 14 }}\u003e\n                        {result.validation.message}\n                      \u003c/div\u003e\n                    )}\n                    {result.success ? (\n                      \u003cdetails\u003e\n                        \u003csummary style\u003d{{ cursor: \u0027pointer\u0027, marginBottom: 8 }}\u003e\n                          查看响应详情（状态码: {result.statusCode}）\n                        \u003c/summary\u003e\n                        \u003cpre style\u003d{{\n                          margin: 0,\n                          background: \u0027#f5f5f5\u0027,\n                          padding: 12,\n                          borderRadius: 4,\n                          maxHeight: 300,\n                          overflow: \u0027auto\u0027,\n                        }}\u003e\n                          {result.responseBody}\n                        \u003c/pre\u003e\n                      \u003c/details\u003e\n                    ) : (\n                      \u003cdiv style\u003d{{ color: \u0027#ff4d4f\u0027 }}\u003e\n                        错误信息: {result.error}\n                      \u003c/div\u003e\n                    )}\n                  \u003c/div\u003e\n                }\n                type\u003d{\n                  result.success\n                    ? (result.validation?.passed ? \u0027success\u0027 : \u0027warning\u0027)\n                    : \u0027error\u0027\n                }\n                closable\n                onClose\u003d{() \u003d\u003e {\n                  setResult(null);\n                  setTaskPassed(false);\n                }",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 45
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 16,
-      "totalLines": 1039
+      "usageCount": 20,
+      "totalLines": 1182
     }
   }
 }
