@@ -143,12 +143,45 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 19
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/layout.tsx",
+      "timestamp": 1762271226428,
+      "startOffset": 170,
+      "endOffset": 1186,
+      "codeContent": "import Navbar from \"@/components/Layout/Navbar\";\n\nconst geistSans \u003d Geist({\n  variable: \"--font-geist-sans\",\n  subsets: [\"latin\"],\n});\n\nconst geistMono \u003d Geist_Mono({\n  variable: \"--font-geist-mono\",\n  subsets: [\"latin\"],\n});\n\nexport const metadata: Metadata \u003d {\n  title: \"ElastiQuest - 游戏化学习 Elasticsearch\",\n  description: \"通过游戏化方式学习 Elasticsearch CRUD 操作\",\n};\n\nexport default function RootLayout({\n  children,\n}: Readonly\u003c{\n  children: React.ReactNode;\n}\u003e) {\n  return (\n    \u003chtml lang\u003d\"en\"\u003e\n      \u003cbody\n        className\u003d{`${geistSans.variable} ${geistMono.variable} antialiased`}\n        style\u003d{{\n          margin: 0,\n          padding: 0,\n          minHeight: \u0027100vh\u0027,\n          background: \u0027linear-gradient(135deg, #667eea 0%, #764ba2 100%)\u0027,\n        }}\n      \u003e\n        \u003cAntdProvider\u003e\n          \u003cdiv style\u003d{{\n            minHeight: \u0027100vh\u0027,\n            background: \u0027rgba(255, 255, 255, 0.95)\u0027,\n          }}\u003e\n            \u003cNavbar /\u003e\n            \u003cmain\u003e\n              {children}\n            \u003c/main\u003e\n          \u003c/div\u003e",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 43
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/config/page.tsx",
+      "timestamp": 1762271286508,
+      "startOffset": 87,
+      "endOffset": 446,
+      "codeContent": ", Button, Alert } from \u0027antd\u0027;\nimport { DatabaseOutlined, UnorderedListOutlined, HomeOutlined } from \u0027@ant-design/icons\u0027;\nimport ESConnectionForm from \u0027@/components/Config/ESConnectionForm\u0027;\nimport ESConnectionList from \u0027@/components/Config/ESConnectionList\u0027;\nimport { ESConnectionConfig, useAppStore } from \u0027@/stores/useAppStore\u0027;\nimport Link from \u0027next/link",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 6
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/config/page.tsx",
+      "timestamp": 1762271301533,
+      "startOffset": 698,
+      "endOffset": 2398,
+      "codeContent": "  const { esConnections, activeConnectionId } \u003d useAppStore();\n\n  const handleAddSuccess \u003d () \u003d\u003e {\n    // 添加成功后切换到列表页\n    setActiveTab(\u0027list\u0027);\n    setEditingConfig(null);\n  };\n\n  const handleEdit \u003d (config: ESConnectionConfig) \u003d\u003e {\n    setEditingConfig(config);\n    setActiveTab(\u0027add\u0027);\n  };\n\n  const handleCancelEdit \u003d () \u003d\u003e {\n    setEditingConfig(null);\n    setActiveTab(\u0027list\u0027);\n  };\n\n  const hasActiveConnection \u003d esConnections.length \u003e 0 \u0026\u0026 activeConnectionId;\n\n  return (\n    \u003cdiv style\u003d{{ maxWidth: 1200, margin: \u00270 auto\u0027, padding: \u002724px\u0027 }}\u003e\n      \u003cSpace direction\u003d\"vertical\" size\u003d\"large\" style\u003d{{ width: \u0027100%\u0027 }}\u003e\n        \u003cdiv style\u003d{{ display: \u0027flex\u0027, justifyContent: \u0027space-between\u0027, alignItems: \u0027flex-start\u0027 }}\u003e\n          \u003cdiv\u003e\n            \u003cTitle level\u003d{2}\u003e\n              \u003cDatabaseOutlined /\u003e ES 连接配置\n            \u003c/Title\u003e\n            \u003cParagraph type\u003d\"secondary\"\u003e\n              配置和管理你的 Elasticsearch 连接。你可以添加多个连接配置，并在不同环境之间切换。\n            \u003c/Paragraph\u003e\n          \u003c/div\u003e\n          \u003cLink href\u003d\"/\"\u003e\n            \u003cButton type\u003d\"default\" icon\u003d{\u003cHomeOutlined /\u003e} size\u003d\"large\"\u003e\n              返回首页\n            \u003c/Button\u003e\n          \u003c/Link\u003e\n        \u003c/div\u003e\n\n        {hasActiveConnection \u0026\u0026 (\n          \u003cAlert\n            message\u003d\"配置完成！\"\n            description\u003d{\n              \u003cdiv\u003e\n                你已经配置了 ES 连接，现在可以{\u0027 \u0027}\n                \u003cLink href\u003d\"/tasks\" style\u003d{{ fontWeight: \u0027bold\u0027 }}\u003e\n                  开始任务\n                \u003c/Link\u003e\n                {\u0027 \u0027}或{\u0027 \u0027}\n                \u003cLink href\u003d\"/\" style\u003d{{ fontWeight: \u0027bold\u0027 }}\u003e\n                  返回首页\n                \u003c/Link\u003e\n              \u003c/div\u003e\n            }\n            type\u003d\"success\"\n            showIcon\n            closable\n          /\u003e\n        )}",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 59
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 13,
-      "totalLines": 931
+      "usageCount": 16,
+      "totalLines": 1039
     }
   }
 }
