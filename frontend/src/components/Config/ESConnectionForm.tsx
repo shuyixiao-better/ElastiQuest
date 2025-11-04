@@ -3,32 +3,74 @@
 import { Form, Input, InputNumber, Select, Button, message } from 'antd';
 import { ESConnectionConfig } from '@/stores/useAppStore';
 import { useAppStore } from '@/stores/useAppStore';
+import { useEffect } from 'react';
 
 interface ESConnectionFormProps {
   onSuccess?: () => void;
+  editingConfig?: ESConnectionConfig | null;
+  onCancelEdit?: () => void;
 }
 
-export default function ESConnectionForm({ onSuccess }: ESConnectionFormProps) {
+export default function ESConnectionForm({ onSuccess, editingConfig, onCancelEdit }: ESConnectionFormProps) {
   const [form] = Form.useForm();
-  const { addConnection } = useAppStore();
+  const { addConnection, updateConnection } = useAppStore();
+
+  // 当编辑配置改变时，更新表单值
+  useEffect(() => {
+    if (editingConfig) {
+      form.setFieldsValue({
+        name: editingConfig.name,
+        host: editingConfig.host,
+        port: editingConfig.port,
+        scheme: editingConfig.scheme,
+        username: editingConfig.username,
+        password: editingConfig.password,
+        environment: editingConfig.environment,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [editingConfig, form]);
 
   const onFinish = (values: any) => {
-    const config: ESConnectionConfig = {
-      id: Date.now().toString(),
-      name: values.name,
-      host: values.host,
-      port: values.port,
-      scheme: values.scheme,
-      username: values.username,
-      password: values.password,
-      environment: values.environment,
-      createdAt: new Date().toISOString(),
-    };
+    if (editingConfig) {
+      // 编辑模式
+      updateConnection(editingConfig.id, {
+        name: values.name,
+        host: values.host,
+        port: values.port,
+        scheme: values.scheme,
+        username: values.username,
+        password: values.password,
+        environment: values.environment,
+      });
+      message.success('ES 连接配置已更新');
+      form.resetFields();
+      onCancelEdit?.();
+    } else {
+      // 添加模式
+      const config: ESConnectionConfig = {
+        id: Date.now().toString(),
+        name: values.name,
+        host: values.host,
+        port: values.port,
+        scheme: values.scheme,
+        username: values.username,
+        password: values.password,
+        environment: values.environment,
+        createdAt: new Date().toISOString(),
+      };
 
-    addConnection(config);
-    message.success('ES 连接配置已添加');
-    form.resetFields();
+      addConnection(config);
+      message.success('ES 连接配置已添加');
+      form.resetFields();
+    }
     onSuccess?.();
+  };
+
+  const handleCancel = () => {
+    form.resetFields();
+    onCancelEdit?.();
   };
 
   return (
@@ -90,9 +132,16 @@ export default function ESConnectionForm({ onSuccess }: ESConnectionFormProps) {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" block>
-          添加配置
-        </Button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Button type="primary" htmlType="submit" style={{ flex: 1 }}>
+            {editingConfig ? '更新配置' : '添加配置'}
+          </Button>
+          {editingConfig && (
+            <Button onClick={handleCancel} style={{ flex: 1 }}>
+              取消
+            </Button>
+          )}
+        </div>
       </Form.Item>
     </Form>
   );
