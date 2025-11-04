@@ -1,34 +1,33 @@
 'use client';
 
 import { useState, use } from 'react';
-import { 
-  Card, 
-  Typography, 
-  Space, 
-  Button, 
-  Input, 
-  Tag, 
-  Alert, 
-  Collapse,
+import {
+  Card,
+  Typography,
+  Space,
+  Button,
+  Tag,
+  Alert,
   message,
   Steps,
+  Empty,
 } from 'antd';
-import { 
+import {
   ArrowLeftOutlined,
   FireOutlined,
   BulbOutlined,
   CheckCircleOutlined,
   PlayCircleOutlined,
   CodeOutlined,
+  BookOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { tasks } from '@/data/tasks';
 import { useAppStore } from '@/stores/useAppStore';
+import SmartCodeEditor from '@/components/CodeEditor/SmartCodeEditor';
 
 const { Title, Paragraph, Text } = Typography;
-const { TextArea } = Input;
-const { Panel } = Collapse;
 
 export default function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -87,16 +86,18 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
     message.success({
       content: (
         <div>
-          <div style={{ fontWeight: 'bold' }}>🎉 任务完成！</div>
-          <div>获得 {task.experience} 经验值</div>
+          <div style={{ fontWeight: 'bold', fontSize: 16 }}>
+            {task.successMessage || '🎉 任务完成！'}
+          </div>
+          <div style={{ marginTop: 4 }}>✨ 获得 {task.experience} 经验值</div>
         </div>
       ),
-      duration: 3,
+      duration: 4,
     });
-    
+
     setTimeout(() => {
       router.push('/tasks');
-    }, 1500);
+    }, 2000);
   };
 
   const categoryColors = {
@@ -134,14 +135,46 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
                 )}
               </Space>
             </div>
-            
+
             <Title level={2} style={{ margin: 0 }}>
               {task.title}
             </Title>
-            
+
             <Paragraph style={{ fontSize: 16, margin: 0 }}>
               {task.description}
             </Paragraph>
+          </Space>
+        </Card>
+
+        {/* 故事背景 */}
+        <Card
+          title={<><BookOutlined /> 故事背景</>}
+          style={{
+            background: 'linear-gradient(135deg, #667eea15 0%, #764ba215 100%)',
+            border: '2px solid #667eea30',
+          }}
+        >
+          <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+            <div style={{
+              padding: 16,
+              background: 'white',
+              borderRadius: 8,
+              borderLeft: '4px solid #667eea',
+            }}>
+              <Text style={{ fontSize: 15, lineHeight: 1.8 }}>
+                {task.story}
+              </Text>
+            </div>
+            <div style={{
+              padding: 16,
+              background: '#fffbe6',
+              borderRadius: 8,
+              borderLeft: '4px solid #faad14',
+            }}>
+              <Text style={{ fontSize: 15, lineHeight: 1.8 }}>
+                {task.scenario}
+              </Text>
+            </div>
           </Space>
         </Card>
 
@@ -211,18 +244,15 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
             )}
 
             <div>
-              <Text strong>输入你的代码：</Text>
-              <TextArea
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="在这里输入 Elasticsearch API 请求..."
-                rows={8}
-                style={{ 
-                  marginTop: 8,
-                  fontFamily: 'monospace',
-                  fontSize: 14,
-                }}
-              />
+              <Text strong style={{ fontSize: 16 }}>✨ 施展你的魔法咒语：</Text>
+              <div style={{ marginTop: 8 }}>
+                <SmartCodeEditor
+                  value={code}
+                  onChange={setCode}
+                  placeholder="在这里输入 Elasticsearch API 请求...&#10;&#10;💡 提示：按 Ctrl+Space 可以显示智能建议"
+                  rows={12}
+                />
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: 8 }}>
