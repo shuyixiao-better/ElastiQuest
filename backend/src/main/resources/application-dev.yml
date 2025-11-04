@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: elasticquest-backend-dev
+
+logging:
+  level:
+    root: INFO
+    com.elasticquest.backend: DEBUG
+    org.elasticsearch: DEBUG
