@@ -1,16 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, Tabs, Typography, Space, Tag, Progress, Row, Col, Button, Empty } from 'antd';
-import { 
-  PlusOutlined, 
-  SearchOutlined, 
-  EditOutlined, 
+import { Card, Tabs, Typography, Space, Tag, Progress, Row, Col, Button, Empty, Modal, App } from 'antd';
+import {
+  PlusOutlined,
+  SearchOutlined,
+  EditOutlined,
   DeleteOutlined,
   TrophyOutlined,
   FireOutlined,
   CheckCircleOutlined,
   LockOutlined,
+  ReloadOutlined,
+  WarningOutlined,
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { tasks, tasksByCategory } from '@/data/tasks';
@@ -53,9 +55,10 @@ const difficultyNames = {
 };
 
 export default function TasksPage() {
-  const { gamification, esConnections, activeConnectionId } = useAppStore();
+  const { message, modal } = App.useApp();
+  const { gamification, esConnections, activeConnectionId, resetAllTasks, resetAllProgress } = useAppStore();
   const [activeTab, setActiveTab] = useState('all');
-  
+
   const hasConnection = esConnections.length > 0 && activeConnectionId;
   const completedTasksCount = gamification.completedTasks.length;
   const totalTasks = tasks.length;
@@ -65,9 +68,65 @@ export default function TasksPage() {
     return gamification.completedTasks.includes(taskId);
   };
 
+  const handleResetAllTasks = () => {
+    modal.confirm({
+      title: '🔄 重置所有任务',
+      icon: <WarningOutlined />,
+      content: '确定要重置所有任务吗？这将清除所有任务的完成状态，但保留你的等级和经验值。',
+      okText: '确定重置',
+      cancelText: '取消',
+      okButtonProps: { danger: true },
+      onOk: () => {
+        resetAllTasks();
+        message.success('所有任务已重置！');
+      },
+    });
+  };
+
+  const handleResetAllProgress = () => {
+    modal.confirm({
+      title: '⚠️ 重置所有进度',
+      icon: <WarningOutlined style={{ color: '#ff4d4f' }} />,
+      content: (
+        <div>
+          <p>确定要重置所有进度吗？这将清除：</p>
+          <ul>
+            <li>所有任务完成状态</li>
+            <li>等级（重置为 1 级）</li>
+            <li>经验值（重置为 0）</li>
+            <li>所有成就</li>
+          </ul>
+          <p style={{ color: '#ff4d4f', fontWeight: 'bold' }}>此操作不可恢复！</p>
+        </div>
+      ),
+      okText: '确定重置',
+      cancelText: '取消',
+      okButtonProps: { danger: true },
+      onOk: () => {
+        resetAllProgress();
+        message.success('所有进度已重置！');
+      },
+    });
+  };
+
+  const handleResetTask = (taskId: string, taskTitle: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    modal.confirm({
+      title: '重置任务',
+      content: `确定要重置任务"${taskTitle}"吗？`,
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {
+        const { resetTask } = useAppStore.getState();
+        resetTask(taskId);
+        message.success('任务已重置！');
+      },
+    });
+  };
+
   const renderTaskCard = (task: any) => {
     const completed = isTaskCompleted(task.id);
-    
+
     return (
       <Card
         key={task.id}
@@ -88,17 +147,17 @@ export default function TasksPage() {
                 <Title level={4} style={{ margin: 0 }}>
                   {task.title}
                   {completed && (
-                    <CheckCircleOutlined 
-                      style={{ color: '#52c41a', marginLeft: 8 }} 
+                    <CheckCircleOutlined
+                      style={{ color: '#52c41a', marginLeft: 8 }}
                     />
                   )}
                 </Title>
               </div>
-              
+
               <Paragraph type="secondary" style={{ margin: 0 }}>
                 {task.description}
               </Paragraph>
-              
+
               <Space>
                 <Tag color={categoryColors[task.category]}>
                   {categoryNames[task.category]}
@@ -112,26 +171,40 @@ export default function TasksPage() {
               </Space>
             </Space>
           </div>
-          
+
           <div style={{ marginLeft: 16 }}>
-            {!hasConnection ? (
-              <Button 
-                icon={<LockOutlined />} 
-                disabled
-              >
-                需要配置 ES
-              </Button>
-            ) : completed ? (
-              <Button type="default" icon={<CheckCircleOutlined />}>
-                已完成
-              </Button>
-            ) : (
-              <Link href={`/tasks/${task.id}`}>
-                <Button type="primary">
-                  开始任务
+            <Space direction="vertical" size="small">
+              {!hasConnection ? (
+                <Button
+                  icon={<LockOutlined />}
+                  disabled
+                >
+                  需要配置 ES
                 </Button>
-              </Link>
-            )}
+              ) : completed ? (
+                <>
+                  <Link href={`/tasks/${task.id}`}>
+                    <Button type="default" icon={<CheckCircleOutlined />} block>
+                      查看详情
+                    </Button>
+                  </Link>
+                  <Button
+                    size="small"
+                    icon={<ReloadOutlined />}
+                    onClick={(e) => handleResetTask(task.id, task.title, e)}
+                    block
+                  >
+                    重新挑战
+                  </Button>
+                </>
+              ) : (
+                <Link href={`/tasks/${task.id}`}>
+                  <Button type="primary">
+                    开始任务
+                  </Button>
+                </Link>
+              )}
+            </Space>
           </div>
         </div>
       </Card>
@@ -163,8 +236,8 @@ export default function TasksPage() {
                       {gamification.experience} EXP
                     </Text>
                   </div>
-                  <Progress 
-                    percent={progress} 
+                  <Progress
+                    percent={progress}
                     strokeColor="#fff"
                     trailColor="rgba(255,255,255,0.3)"
                     showInfo={false}
@@ -176,6 +249,25 @@ export default function TasksPage() {
               </Card>
             </Col>
           </Row>
+
+          {/* 重置按钮 */}
+          {completedTasksCount > 0 && (
+            <div style={{ marginTop: 16, display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <Button
+                icon={<ReloadOutlined />}
+                onClick={handleResetAllTasks}
+              >
+                重置所有任务
+              </Button>
+              <Button
+                danger
+                icon={<WarningOutlined />}
+                onClick={handleResetAllProgress}
+              >
+                重置所有进度
+              </Button>
+            </div>
+          )}
         </Card>
 
         {/* ES 连接提示 */}

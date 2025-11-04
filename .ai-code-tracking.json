@@ -220,12 +220,89 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 45
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/stores/useAppStore.ts",
+      "timestamp": 1762273645159,
+      "startOffset": 977,
+      "endOffset": 1205,
+      "codeContent": "\n  // 游戏化操作\n  completeTask: (taskId: string, experience: number) \u003d\u003e void;\n  unlockAchievement: (achievementId: string) \u003d\u003e void;\n  resetTask: (taskId: string) \u003d\u003e void;\n  resetAllTasks: () \u003d\u003e void;\n  resetAllProgress: () \u003d\u003e void;\n",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 8
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/stores/useAppStore.ts",
+      "timestamp": 1762273660190,
+      "startOffset": 3355,
+      "endOffset": 4107,
+      "codeContent": "\n      resetTask: (taskId) \u003d\u003e\n        set((state) \u003d\u003e ({\n          gamification: {\n            ...state.gamification,\n            completedTasks: state.gamification.completedTasks.filter(id \u003d\u003e id !\u003d\u003d taskId),\n          },\n        })),\n\n      resetAllTasks: () \u003d\u003e\n        set((state) \u003d\u003e ({\n          gamification: {\n            ...state.gamification,\n            completedTasks: [],\n          },\n        })),\n\n      resetAllProgress: () \u003d\u003e\n        set((state) \u003d\u003e ({\n          gamification: {\n            level: 1,\n            experience: 0,\n            completedTasks: [],\n            achievements: [],\n          },\n        })),\n\n      // UI 操作\n      toggleSidebar: () \u003d\u003e\n        set((state) \u003d\u003e ({\n          sidebarOpen: !state.sidebarOpen,\n        })),\n",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 33
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273705263,
+      "startOffset": 4341,
+      "endOffset": 4825,
+      "codeContent": "和重置按钮 */}\n        \u003cdiv style\u003d{{ display: \u0027flex\u0027, justifyContent: \u0027space-between\u0027, alignItems: \u0027center\u0027 }}\u003e\n          \u003cLink href\u003d\"/tasks\"\u003e\n            \u003cButton icon\u003d{\u003cArrowLeftOutlined /\u003e}\u003e\n              返回任务列表\n            \u003c/Button\u003e\n          \u003c/Link\u003e\n\n          {isCompleted \u0026\u0026 (\n            \u003cButton\n              danger\n              onClick\u003d{handleReset}\n              style\u003d{{ marginLeft: \u0027auto\u0027 }}\n            \u003e\n              🔄 重置任务\n            \u003c/Button\u003e\n          )}\n        \u003c/div",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 18
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273720288,
+      "startOffset": 127,
+      "endOffset": 332,
+      "codeContent": ", Modal, App } from \u0027antd\u0027;\nimport {\n  PlusOutlined,\n  SearchOutlined,\n  EditOutlined,\n  DeleteOutlined,\n  TrophyOutlined,\n  FireOutlined,\n  CheckCircleOutlined,\n  LockOutlined,\n  ReloadOutlined,\n  Warning",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 12
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273742052,
+      "startOffset": 1199,
+      "endOffset": 2754,
+      "codeContent": "message, modal } \u003d App.useApp();\n  const { gamification, esConnections, activeConnectionId, resetAllTasks, resetAllProgress } \u003d useAppStore();\n  const [activeTab, setActiveTab] \u003d useState(\u0027all\u0027);\n\n  const hasConnection \u003d esConnections.length \u003e 0 \u0026\u0026 activeConnectionId;\n  const completedTasksCount \u003d gamification.completedTasks.length;\n  const totalTasks \u003d tasks.length;\n  const progress \u003d (completedTasksCount / totalTasks) * 100;\n\n  const isTaskCompleted \u003d (taskId: string) \u003d\u003e {\n    return gamification.completedTasks.includes(taskId);\n  };\n\n  const handleResetAllTasks \u003d () \u003d\u003e {\n    modal.confirm({\n      title: \u0027🔄 重置所有任务\u0027,\n      icon: \u003cWarningOutlined /\u003e,\n      content: \u0027确定要重置所有任务吗？这将清除所有任务的完成状态，但保留你的等级和经验值。\u0027,\n      okText: \u0027确定重置\u0027,\n      cancelText: \u0027取消\u0027,\n      okButtonProps: { danger: true },\n      onOk: () \u003d\u003e {\n        resetAllTasks();\n        message.success(\u0027所有任务已重置！\u0027);\n      },\n    });\n  };\n\n  const handleResetAllProgress \u003d () \u003d\u003e {\n    modal.confirm({\n      title: \u0027⚠️ 重置所有进度\u0027,\n      icon: \u003cWarningOutlined style\u003d{{ color: \u0027#ff4d4f\u0027 }} /\u003e,\n      content: (\n        \u003cdiv\u003e\n          \u003cp\u003e确定要重置所有进度吗？这将清除：\u003c/p\u003e\n          \u003cul\u003e\n            \u003cli\u003e所有任务完成状态\u003c/li\u003e\n            \u003cli\u003e等级（重置为 1 级）\u003c/li\u003e\n            \u003cli\u003e经验值（重置为 0）\u003c/li\u003e\n            \u003cli\u003e所有成就\u003c/li\u003e\n          \u003c/ul\u003e\n          \u003cp style\u003d{{ color: \u0027#ff4d4f\u0027, fontWeight: \u0027bold\u0027 }}\u003e此操作不可恢复！\u003c/p\u003e\n        \u003c/div\u003e\n      ),\n      okText: \u0027确定重置\u0027,\n      cancelText: \u0027取消\u0027,\n      okButtonProps: { danger: true },\n      onOk: () \u003d\u003e {\n        resetAllProgress();\n        message.success(\u0027所有进度已重置！\u0027);\n      },\n    }",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 52
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273757066,
+      "startOffset": 6343,
+      "endOffset": 7340,
+      "codeContent": "\n                    percent\u003d{progress}\n                    strokeColor\u003d\"#fff\"\n                    trailColor\u003d\"rgba(255,255,255,0.3)\"\n                    showInfo\u003d{false}\n                  /\u003e\n                  \u003cText style\u003d{{ color: \u0027white\u0027, fontSize: 14 }}\u003e\n                    已完成 {completedTasksCount} / {totalTasks} 个任务\n                  \u003c/Text\u003e\n                \u003c/Space\u003e\n              \u003c/Card\u003e\n            \u003c/Col\u003e\n          \u003c/Row\u003e\n\n          {/* 重置按钮 */}\n          {completedTasksCount \u003e 0 \u0026\u0026 (\n            \u003cdiv style\u003d{{ marginTop: 16, display: \u0027flex\u0027, gap: 8, justifyContent: \u0027flex-end\u0027 }}\u003e\n              \u003cButton\n                icon\u003d{\u003cReloadOutlined /\u003e}\n                onClick\u003d{handleResetAllTasks}\n              \u003e\n                重置所有任务\n              \u003c/Button\u003e\n              \u003cButton\n                danger\n                icon\u003d{\u003cWarningOutlined /\u003e}\n                onClick\u003d{handleResetAllProgress}\n              \u003e\n                重置所有进度\n              \u003c/Button\u003e\n            \u003c/div\u003e\n          )}",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 32
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273785295,
+      "startOffset": 2771,
+      "endOffset": 5932,
+      "codeContent": "handleResetTask \u003d (taskId: string, taskTitle: string, e: React.MouseEvent) \u003d\u003e {\n    e.stopPropagation();\n    modal.confirm({\n      title: \u0027重置任务\u0027,\n      content: `确定要重置任务\"${taskTitle}\"吗？`,\n      okText: \u0027确定\u0027,\n      cancelText: \u0027取消\u0027,\n      onOk: () \u003d\u003e {\n        const { resetTask } \u003d useAppStore.getState();\n        resetTask(taskId);\n        message.success(\u0027任务已重置！\u0027);\n      },\n    });\n  };\n\n  const renderTaskCard \u003d (task: any) \u003d\u003e {\n    const completed \u003d isTaskCompleted(task.id);\n\n    return (\n      \u003cCard\n        key\u003d{task.id}\n        hoverable\n        style\u003d{{\n          marginBottom: 16,\n          border: completed ? \u00272px solid #52c41a\u0027 : \u00271px solid #d9d9d9\u0027,\n          opacity: !hasConnection ? 0.6 : 1,\n        }}\n      \u003e\n        \u003cdiv style\u003d{{ display: \u0027flex\u0027, justifyContent: \u0027space-between\u0027, alignItems: \u0027flex-start\u0027 }}\u003e\n          \u003cdiv style\u003d{{ flex: 1 }}\u003e\n            \u003cSpace direction\u003d\"vertical\" size\u003d\"small\" style\u003d{{ width: \u0027100%\u0027 }}\u003e\n              \u003cdiv style\u003d{{ display: \u0027flex\u0027, alignItems: \u0027center\u0027, gap: 8 }}\u003e\n                \u003cspan style\u003d{{ fontSize: 24 }}\u003e\n                  {categoryIcons[task.category]}\n                \u003c/span\u003e\n                \u003cTitle level\u003d{4} style\u003d{{ margin: 0 }}\u003e\n                  {task.title}\n                  {completed \u0026\u0026 (\n                    \u003cCheckCircleOutlined\n                      style\u003d{{ color: \u0027#52c41a\u0027, marginLeft: 8 }}\n                    /\u003e\n                  )}\n                \u003c/Title\u003e\n              \u003c/div\u003e\n\n              \u003cParagraph type\u003d\"secondary\" style\u003d{{ margin: 0 }}\u003e\n                {task.description}\n              \u003c/Paragraph\u003e\n\n              \u003cSpace\u003e\n                \u003cTag color\u003d{categoryColors[task.category]}\u003e\n                  {categoryNames[task.category]}\n                \u003c/Tag\u003e\n                \u003cTag color\u003d{difficultyColors[task.difficulty]}\u003e\n                  {difficultyNames[task.difficulty]}\n                \u003c/Tag\u003e\n                \u003cTag icon\u003d{\u003cFireOutlined /\u003e} color\u003d\"orange\"\u003e\n                  +{task.experience} EXP\n                \u003c/Tag\u003e\n              \u003c/Space\u003e\n            \u003c/Space\u003e\n          \u003c/div\u003e\n\n          \u003cdiv style\u003d{{ marginLeft: 16 }}\u003e\n            \u003cSpace direction\u003d\"vertical\" size\u003d\"small\"\u003e\n              {!hasConnection ? (\n                \u003cButton\n                  icon\u003d{\u003cLockOutlined /\u003e}\n                  disabled\n                \u003e\n                  需要配置 ES\n                \u003c/Button\u003e\n              ) : completed ? (\n                \u003c\u003e\n                  \u003cLink href\u003d{`/tasks/${task.id}`}\u003e\n                    \u003cButton type\u003d\"default\" icon\u003d{\u003cCheckCircleOutlined /\u003e} block\u003e\n                      查看详情\n                    \u003c/Button\u003e\n                  \u003c/Link\u003e\n                  \u003cButton\n                    size\u003d\"small\"\n                    icon\u003d{\u003cReloadOutlined /\u003e}\n                    onClick\u003d{(e) \u003d\u003e handleResetTask(task.id, task.title, e)}\n                    block\n                  \u003e\n                    重新挑战\n                  \u003c/Button\u003e\n                \u003c/\u003e\n              ) : (\n                \u003cLink href\u003d{`/tasks/${task.id}`}\u003e\n                  \u003cButton type\u003d\"primary\"\u003e\n                    开始任务\n                  \u003c/Button\u003e\n                \u003c/Link\u003e\n              )}\n            \u003c/Space\u003e",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 96
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 20,
-      "totalLines": 1182
+      "usageCount": 27,
+      "totalLines": 1433
     }
   }
 }

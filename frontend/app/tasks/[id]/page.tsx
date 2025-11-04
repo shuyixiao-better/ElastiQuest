@@ -34,7 +34,7 @@ const { Title, Paragraph, Text } = Typography;
 export default function TaskDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { gamification, completeTask, esConnections, activeConnectionId } = useAppStore();
+  const { gamification, completeTask, resetTask, esConnections, activeConnectionId } = useAppStore();
   const [code, setCode] = useState('');
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -145,6 +145,14 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
     }, 2000);
   };
 
+  const handleReset = () => {
+    resetTask(task.id);
+    setCode('');
+    setResult(null);
+    setTaskPassed(false);
+    message.info('任务已重置，可以重新挑战了！');
+  };
+
   const categoryColors = {
     create: '#52c41a',
     read: '#1890ff',
@@ -155,12 +163,24 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px' }}>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        {/* 返回按钮 */}
-        <Link href="/tasks">
-          <Button icon={<ArrowLeftOutlined />}>
-            返回任务列表
-          </Button>
-        </Link>
+        {/* 返回按钮和重置按钮 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Link href="/tasks">
+            <Button icon={<ArrowLeftOutlined />}>
+              返回任务列表
+            </Button>
+          </Link>
+
+          {isCompleted && (
+            <Button
+              danger
+              onClick={handleReset}
+              style={{ marginLeft: 'auto' }}
+            >
+              🔄 重置任务
+            </Button>
+          )}
+        </div>
 
         {/* 任务信息 */}
         <Card>

@@ -41,11 +41,14 @@ interface AppActions {
   removeConnection: (id: string) => void;
   setActiveConnection: (id: string | null) => void;
   updateConnection: (id: string, config: Partial<ESConnectionConfig>) => void;
-  
+
   // 游戏化操作
   completeTask: (taskId: string, experience: number) => void;
   unlockAchievement: (achievementId: string) => void;
-  
+  resetTask: (taskId: string) => void;
+  resetAllTasks: () => void;
+  resetAllProgress: () => void;
+
   // UI 操作
   toggleSidebar: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
@@ -117,13 +120,39 @@ export const useAppStore = create<AppState & AppActions>()(
               : [...state.gamification.achievements, achievementId],
           },
         })),
-      
+
+      resetTask: (taskId) =>
+        set((state) => ({
+          gamification: {
+            ...state.gamification,
+            completedTasks: state.gamification.completedTasks.filter(id => id !== taskId),
+          },
+        })),
+
+      resetAllTasks: () =>
+        set((state) => ({
+          gamification: {
+            ...state.gamification,
+            completedTasks: [],
+          },
+        })),
+
+      resetAllProgress: () =>
+        set((state) => ({
+          gamification: {
+            level: 1,
+            experience: 0,
+            completedTasks: [],
+            achievements: [],
+          },
+        })),
+
       // UI 操作
       toggleSidebar: () =>
         set((state) => ({
           sidebarOpen: !state.sidebarOpen,
         })),
-      
+
       setTheme: (theme) =>
         set({
           theme,
