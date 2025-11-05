@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, Input, Button, Space, message, Spin, Collapse, Typography } from 'antd';
+import { Card, Input, Button, Space, App, Spin, Collapse, Typography } from 'antd';
 import type { CollapseProps } from 'antd';
 import { SendOutlined, ClearOutlined, SettingOutlined, FileTextOutlined } from '@ant-design/icons';
 import { streamRAGChat, HighlightSegment } from '@/lib/api/ragChat';
@@ -11,6 +11,7 @@ const { TextArea } = Input;
 const { Title, Text } = Typography;
 
 export default function RAGChatPanel() {
+  const { message } = App.useApp();
   const [question, setQuestion] = useState('');
   const [contextMaterial, setContextMaterial] = useState('');
   const [systemPrompt, setSystemPrompt] = useState(
@@ -18,7 +19,7 @@ export default function RAGChatPanel() {
   );
   const [temperature, setTemperature] = useState(1.0);
   const [maxTokens, setMaxTokens] = useState(2000);
-  
+
   const [answer, setAnswer] = useState('');
   const [highlights, setHighlights] = useState<HighlightSegment[]>([]);
   const [loading, setLoading] = useState(false);
@@ -225,9 +226,9 @@ export default function RAGChatPanel() {
             }
           >
             {loading && !answer && (
-              <div style={{ textAlign: 'center', padding: '40px' }}>
-                <Spin size="large" tip="正在生成回答..." />
-              </div>
+              <Spin spinning={true} tip="正在生成回答..." size="large">
+                <div style={{ padding: '40px', minHeight: '100px' }} />
+              </Spin>
             )}
             
             {showHighlights && highlights.length > 0 ? (
