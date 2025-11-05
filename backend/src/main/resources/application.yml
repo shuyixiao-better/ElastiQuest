@@ -39,3 +39,12 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+
+# 模力方舟 LLM 配置
+llm:
+  molizk:
+    api-url: https://ai.gitee.com/v1/chat/completions
+    api-key: ${LLM_API_KEY:your-api-key-here}
+    model: Qwen3-235B-A22B-Instruct-2507
+    timeout: 60000
+    default-system-prompt: "你是一个智能助手。请结合你的知识和用户提供的参考资料来回答问题。如果你的回答中直接引用了参考资料的内容，请保持原文。"

@@ -1,7 +1,7 @@
 'use client';
 
 import { Layout, Button, Badge } from 'antd';
-import { HomeOutlined, DatabaseOutlined, BookOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { HomeOutlined, DatabaseOutlined, BookOutlined, CheckCircleOutlined, RobotOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppStore } from '@/stores/useAppStore';
@@ -33,6 +33,12 @@ export default function Navbar() {
       icon: <BookOutlined style={{ fontSize: '20px' }} />,
       label: '学习任务',
       href: '/tasks',
+    },
+    {
+      key: '/rag',
+      icon: <RobotOutlined style={{ fontSize: '20px' }} />,
+      label: 'RAG 问答',
+      href: '/rag',
     },
   ];
 

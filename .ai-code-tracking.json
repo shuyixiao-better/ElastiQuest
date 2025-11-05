@@ -297,12 +297,34 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 96
+    },
+    {
+      "filePath": "/fragment.java",
+      "timestamp": 1762310023386,
+      "startOffset": 0,
+      "endOffset": 48,
+      "codeContent": "com.elasticquest.backend.ElasticQuestApplication",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
+    },
+    {
+      "filePath": "/fragment.java",
+      "timestamp": 1762310372509,
+      "startOffset": 0,
+      "endOffset": 48,
+      "codeContent": "com.elasticquest.backend.ElasticQuestApplication",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 27,
-      "totalLines": 1433
+      "usageCount": 29,
+      "totalLines": 1435
     }
   }
 }

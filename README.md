@@ -92,12 +92,21 @@ npm run dev
 cd backend
 ```
 
-2. 使用 Maven 安装依赖：
+2. 配置环境变量（重要）：
+```bash
+# 复制环境变量模板
+cp .env.example .env
+
+# 编辑 .env 文件，填入你的模力方舟 API 密钥
+# LLM_API_KEY=your-actual-api-key-here
+```
+
+3. 使用 Maven 安装依赖：
 ```bash
 mvn clean install
 ```
 
-3. 运行应用：
+4. 运行应用：
 ```bash
 mvn spring-boot:run
 ```
@@ -117,6 +126,11 @@ API 文档（Swagger）可在 http://localhost:8080/swagger-ui.html 访问
 - ✅ CORS 配置
 - ✅ 基础状态管理（Zustand）
 - ✅ ES 连接配置管理（前端）
+- ✅ **RAG 智能问答功能**（结合模力方舟 LLM）
+  - 流式对话响应
+  - 智能高亮引用内容
+  - 中文分词优化（HanLP）
+  - 自定义提示词和参数
 
 ### 开发中
 - 🔄 ES CRUD 操作 API
