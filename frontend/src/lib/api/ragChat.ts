@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api';
+import { getApiUrl } from './config';
 
 export interface HighlightSegment {
   text: string;
@@ -34,7 +34,7 @@ export async function streamRAGChat(
   onError: (error: string) => void
 ): Promise<void> {
   try {
-    const response = await fetch(`${API_BASE_URL}/rag-chat/stream`, {
+    const response = await fetch(getApiUrl('/rag-chat/stream'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

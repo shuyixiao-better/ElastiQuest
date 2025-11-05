@@ -63,10 +63,19 @@ npm run dev
 
 ## 🎯 访问应用
 
+启动后会自动显示所有访问地址，包括：
+
+**本地访问**:
 - 🌐 前端: http://localhost:3000
 - 🔧 后端: http://localhost:8080
 - 📚 API 文档: http://localhost:8080/swagger-ui.html
 - 🤖 RAG 问答: http://localhost:3000/rag
+
+**局域网访问** (显示你的实际 IP):
+- 🌐 前端: http://你的IP:3000
+- 🔧 后端: http://你的IP:8080
+
+例如：http://10.10.0.153:3000
 
 ## ✨ 功能体验
 
