@@ -88,12 +88,221 @@
       "aiTool": "AI Assistant",
       "detectionMethod": "REALTIME_SPEED_ANALYSIS",
       "lineCount": 1
+    },
+    {
+      "filePath": "/fragment.java",
+      "timestamp": 1762269510065,
+      "startOffset": 0,
+      "endOffset": 48,
+      "codeContent": "com.elasticquest.backend.ElasticQuestApplication",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 1
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionList.tsx",
+      "timestamp": 1762270727885,
+      "startOffset": 787,
+      "endOffset": 1937,
+      "codeContent": "\n    // 显示测试中的提示\n    const hideLoading \u003d message.loading(\u0027正在测试连接...\u0027, 0);\n\n    try {\n      const result \u003d await testESConnection(config);\n      hideLoading();\n\n      if (result.success) {\n        message.success({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e✅ 连接成功！\u003c/div\u003e\n              \u003cdiv\u003e集群名称: {result.clusterName}\u003c/div\u003e\n              \u003cdiv\u003eES 版本: {result.version}\u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 5,\n        });\n      } else {\n        message.error({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 连接失败\u003c/div\u003e\n              \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e错误信息: {result.error || result.message}\u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 8,\n        });\n      }\n    } catch (error: any) {\n      hideLoading();\n      message.error({\n        content: (\n          \u003cdiv\u003e\n            \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 测试连接时发生错误\u003c/div\u003e\n            \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e{error.message || \u0027未知错误\u0027}\u003c/div\u003e\n          \u003c/div\u003e\n        ),\n        duration: 8,\n      }",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 41
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionForm.tsx",
+      "timestamp": 1762270742914,
+      "startOffset": 218,
+      "endOffset": 692,
+      "codeContent": ", useState } from \u0027react\u0027;\nimport { testESConnection } from \u0027@/lib/api/esConnection\u0027;\n\ninterface ESConnectionFormProps {\n  onSuccess?: () \u003d\u003e void;\n  editingConfig?: ESConnectionConfig | null;\n  onCancelEdit?: () \u003d\u003e void;\n}\n\nexport default function ESConnectionForm({ onSuccess, editingConfig, onCancelEdit }: ESConnectionFormProps) {\n  const [form] \u003d Form.useForm();\n  const { addConnection, updateConnection } \u003d useAppStore();\n  const [testing, setTesting] \u003d useState(false",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 13
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionForm.tsx",
+      "timestamp": 1762270772947,
+      "startOffset": 2177,
+      "endOffset": 4301,
+      "codeContent": "const handleTestConnection \u003d async () \u003d\u003e {\n    try {\n      // 验证表单\n      await form.validateFields();\n      const values \u003d form.getFieldsValue();\n\n      setTesting(true);\n      const hideLoading \u003d message.loading(\u0027正在测试连接...\u0027, 0);\n\n      // 构建临时配置用于测试\n      const testConfig: ESConnectionConfig \u003d {\n        id: editingConfig?.id || \u0027temp\u0027,\n        name: values.name,\n        host: values.host,\n        port: values.port,\n        scheme: values.scheme,\n        username: values.username,\n        password: values.password,\n        environment: values.environment,\n        createdAt: editingConfig?.createdAt || new Date().toISOString(),\n      };\n\n      const result \u003d await testESConnection(testConfig);\n      hideLoading();\n\n      if (result.success) {\n        message.success({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e✅ 连接测试成功！\u003c/div\u003e\n              \u003cdiv\u003e集群名称: {result.clusterName}\u003c/div\u003e\n              \u003cdiv\u003eES 版本: {result.version}\u003c/div\u003e\n              \u003cdiv style\u003d{{ marginTop: 4, fontSize: \u002712px\u0027, color: \u0027#52c41a\u0027 }}\u003e\n                配置正确，可以保存使用\n              \u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 5,\n        });\n      } else {\n        message.error({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 连接测试失败\u003c/div\u003e\n              \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e错误信息: {result.error || result.message}\u003c/div\u003e\n              \u003cdiv style\u003d{{ marginTop: 4, fontSize: \u002712px\u0027, color: \u0027#ff4d4f\u0027 }}\u003e\n                请检查配置后重试\n              \u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 8,\n        });\n      }\n    } catch (error: any) {\n      if (error.errorFields) {\n        message.warning(\u0027请先填写完整的配置信息\u0027);\n      } else {\n        message.error({\n          content: (\n            \u003cdiv\u003e\n              \u003cdiv style\u003d{{ fontWeight: \u0027bold\u0027, marginBottom: 4 }}\u003e❌ 测试连接时发生错误\u003c/div\u003e\n              \u003cdiv style\u003d{{ fontSize: \u002712px\u0027 }}\u003e{error.message || \u0027未知错误\u0027}\u003c/div\u003e\n            \u003c/div\u003e\n          ),\n          duration: 8,\n        });\n      }\n    } finally {\n      setTesting(false);\n    }\n  };\n\n  ",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 73
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/components/Config/ESConnectionForm.tsx",
+      "timestamp": 1762270787969,
+      "startOffset": 5907,
+      "endOffset": 6522,
+      "codeContent": ", flexDirection: \u0027column\u0027 }}\u003e\n          \u003cButton\n            type\u003d\"default\"\n            onClick\u003d{handleTestConnection}\n            loading\u003d{testing}\n            block\n          \u003e\n            {testing ? \u0027测试中...\u0027 : \u0027🔍 测试连接\u0027}\n          \u003c/Button\u003e\n          \u003cdiv style\u003d{{ display: \u0027flex\u0027, gap: \u00278px\u0027 }}\u003e\n            \u003cButton type\u003d\"primary\" htmlType\u003d\"submit\" style\u003d{{ flex: 1 }}\u003e\n              {editingConfig ? \u0027更新配置\u0027 : \u0027添加配置\u0027}\n            \u003c/Button\u003e\n            {editingConfig \u0026\u0026 (\n              \u003cButton onClick\u003d{handleCancel} style\u003d{{ flex: 1 }}\u003e\n                取消\n              \u003c/Button\u003e\n            )}\n          \u003c/div\u003e",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 19
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/layout.tsx",
+      "timestamp": 1762271226428,
+      "startOffset": 170,
+      "endOffset": 1186,
+      "codeContent": "import Navbar from \"@/components/Layout/Navbar\";\n\nconst geistSans \u003d Geist({\n  variable: \"--font-geist-sans\",\n  subsets: [\"latin\"],\n});\n\nconst geistMono \u003d Geist_Mono({\n  variable: \"--font-geist-mono\",\n  subsets: [\"latin\"],\n});\n\nexport const metadata: Metadata \u003d {\n  title: \"ElastiQuest - 游戏化学习 Elasticsearch\",\n  description: \"通过游戏化方式学习 Elasticsearch CRUD 操作\",\n};\n\nexport default function RootLayout({\n  children,\n}: Readonly\u003c{\n  children: React.ReactNode;\n}\u003e) {\n  return (\n    \u003chtml lang\u003d\"en\"\u003e\n      \u003cbody\n        className\u003d{`${geistSans.variable} ${geistMono.variable} antialiased`}\n        style\u003d{{\n          margin: 0,\n          padding: 0,\n          minHeight: \u0027100vh\u0027,\n          background: \u0027linear-gradient(135deg, #667eea 0%, #764ba2 100%)\u0027,\n        }}\n      \u003e\n        \u003cAntdProvider\u003e\n          \u003cdiv style\u003d{{\n            minHeight: \u0027100vh\u0027,\n            background: \u0027rgba(255, 255, 255, 0.95)\u0027,\n          }}\u003e\n            \u003cNavbar /\u003e\n            \u003cmain\u003e\n              {children}\n            \u003c/main\u003e\n          \u003c/div\u003e",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 43
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/config/page.tsx",
+      "timestamp": 1762271286508,
+      "startOffset": 87,
+      "endOffset": 446,
+      "codeContent": ", Button, Alert } from \u0027antd\u0027;\nimport { DatabaseOutlined, UnorderedListOutlined, HomeOutlined } from \u0027@ant-design/icons\u0027;\nimport ESConnectionForm from \u0027@/components/Config/ESConnectionForm\u0027;\nimport ESConnectionList from \u0027@/components/Config/ESConnectionList\u0027;\nimport { ESConnectionConfig, useAppStore } from \u0027@/stores/useAppStore\u0027;\nimport Link from \u0027next/link",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 6
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/config/page.tsx",
+      "timestamp": 1762271301533,
+      "startOffset": 698,
+      "endOffset": 2398,
+      "codeContent": "  const { esConnections, activeConnectionId } \u003d useAppStore();\n\n  const handleAddSuccess \u003d () \u003d\u003e {\n    // 添加成功后切换到列表页\n    setActiveTab(\u0027list\u0027);\n    setEditingConfig(null);\n  };\n\n  const handleEdit \u003d (config: ESConnectionConfig) \u003d\u003e {\n    setEditingConfig(config);\n    setActiveTab(\u0027add\u0027);\n  };\n\n  const handleCancelEdit \u003d () \u003d\u003e {\n    setEditingConfig(null);\n    setActiveTab(\u0027list\u0027);\n  };\n\n  const hasActiveConnection \u003d esConnections.length \u003e 0 \u0026\u0026 activeConnectionId;\n\n  return (\n    \u003cdiv style\u003d{{ maxWidth: 1200, margin: \u00270 auto\u0027, padding: \u002724px\u0027 }}\u003e\n      \u003cSpace direction\u003d\"vertical\" size\u003d\"large\" style\u003d{{ width: \u0027100%\u0027 }}\u003e\n        \u003cdiv style\u003d{{ display: \u0027flex\u0027, justifyContent: \u0027space-between\u0027, alignItems: \u0027flex-start\u0027 }}\u003e\n          \u003cdiv\u003e\n            \u003cTitle level\u003d{2}\u003e\n              \u003cDatabaseOutlined /\u003e ES 连接配置\n            \u003c/Title\u003e\n            \u003cParagraph type\u003d\"secondary\"\u003e\n              配置和管理你的 Elasticsearch 连接。你可以添加多个连接配置，并在不同环境之间切换。\n            \u003c/Paragraph\u003e\n          \u003c/div\u003e\n          \u003cLink href\u003d\"/\"\u003e\n            \u003cButton type\u003d\"default\" icon\u003d{\u003cHomeOutlined /\u003e} size\u003d\"large\"\u003e\n              返回首页\n            \u003c/Button\u003e\n          \u003c/Link\u003e\n        \u003c/div\u003e\n\n        {hasActiveConnection \u0026\u0026 (\n          \u003cAlert\n            message\u003d\"配置完成！\"\n            description\u003d{\n              \u003cdiv\u003e\n                你已经配置了 ES 连接，现在可以{\u0027 \u0027}\n                \u003cLink href\u003d\"/tasks\" style\u003d{{ fontWeight: \u0027bold\u0027 }}\u003e\n                  开始任务\n                \u003c/Link\u003e\n                {\u0027 \u0027}或{\u0027 \u0027}\n                \u003cLink href\u003d\"/\" style\u003d{{ fontWeight: \u0027bold\u0027 }}\u003e\n                  返回首页\n                \u003c/Link\u003e\n              \u003c/div\u003e\n            }\n            type\u003d\"success\"\n            showIcon\n            closable\n          /\u003e\n        )}",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 59
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273269570,
+      "startOffset": 567,
+      "endOffset": 687,
+      "codeContent": "import { executeESCommand } from \u0027@/lib/api/esExecution\u0027;\nimport { validateTaskCompletion } from \u0027@/lib/taskValidator\u0027;\n",
+      "aiProbability": 95,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 3
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273299631,
+      "startOffset": 1982,
+      "endOffset": 3414,
+      "codeContent": "魔法咒语\u0027);\n      return;\n    }\n\n    if (!activeConnection) {\n      message.error(\u0027请先配置 ES 连接\u0027);\n      return;\n    }\n\n    setLoading(true);\n    setTaskPassed(false);\n\n    try {\n      // 调用后端执行 ES 命令\n      const hideLoading \u003d message.loading(\u0027正在施展魔法咒语...\u0027, 0);\n      const executionResult \u003d await executeESCommand(code, activeConnection);\n      hideLoading();\n\n      if (executionResult.success) {\n        // 验证任务是否完成\n        const validation \u003d validateTaskCompletion(task!, executionResult);\n\n        setResult({\n          success: true,\n          statusCode: executionResult.statusCode,\n          responseBody: executionResult.responseBody,\n          validation: validation,\n        });\n\n        if (validation.passed) {\n          setTaskPassed(true);\n          message.success({\n            content: validation.message,\n            duration: 3,\n          });\n        } else {\n          message.warning({\n            content: validation.message,\n            duration: 5,\n          });\n        }\n      } else {\n        setResult({\n          success: false,\n          error: executionResult.error,\n        });\n        message.error({\n          content: `❌ 咒语施展失败：${executionResult.error}`,\n          duration: 5,\n        });\n      }\n    } catch (error: any) {\n      message.error(\u0027执行时发生错误：\u0027 + error.message);\n      setResult({\n        success: false,\n        error: error.message,\n      });\n    } finally {\n      setLoading(false);\n    }",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 60
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273314651,
+      "startOffset": 8637,
+      "endOffset": 9742,
+      "codeContent": "\n                type\u003d\"primary\"\n                icon\u003d{\u003cPlayCircleOutlined /\u003e}\n                onClick\u003d{handleExecute}\n                loading\u003d{loading}\n                size\u003d\"large\"\n                disabled\u003d{!activeConnection}\n              \u003e\n                {loading ? \u0027施展中...\u0027 : \u0027✨ 施展魔法\u0027}\n              \u003c/Button\u003e\n              {taskPassed \u0026\u0026 !isCompleted \u0026\u0026 (\n                \u003cButton\n                  type\u003d\"primary\"\n                  style\u003d{{ background: \u0027#52c41a\u0027, borderColor: \u0027#52c41a\u0027 }}\n                  icon\u003d{\u003cCheckCircleOutlined /\u003e}\n                  onClick\u003d{handleComplete}\n                  size\u003d\"large\"\n                \u003e\n                  🎉 完成任务\n                \u003c/Button\u003e\n              )}\n            \u003c/div\u003e\n\n            {!activeConnection \u0026\u0026 (\n              \u003cAlert\n                message\u003d\"⚠️ 需要配置 ES 连接\"\n                description\u003d{\n                  \u003cspan\u003e\n                    请先 \u003cLink href\u003d\"/config\" style\u003d{{ fontWeight: \u0027bold\u0027 }}\u003e配置 ES 连接\u003c/Link\u003e 才能执行任务\n                  \u003c/span\u003e\n                }\n                type\u003d\"warning\"\n                showIcon\n              /\u003e\n            )}",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 35
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273344680,
+      "startOffset": 9815,
+      "endOffset": 11486,
+      "codeContent": "\n                  result.success\n                    ? (result.validation?.passed ? \u0027✅ 任务验证通过！\u0027 : \u0027⚠️ 执行成功，但未满足任务要求\u0027)\n                    : \u0027❌ 执行失败\u0027\n                }\n                description\u003d{\n                  \u003cdiv\u003e\n                    {result.validation \u0026\u0026 (\n                      \u003cdiv style\u003d{{ marginBottom: 12, fontSize: 14 }}\u003e\n                        {result.validation.message}\n                      \u003c/div\u003e\n                    )}\n                    {result.success ? (\n                      \u003cdetails\u003e\n                        \u003csummary style\u003d{{ cursor: \u0027pointer\u0027, marginBottom: 8 }}\u003e\n                          查看响应详情（状态码: {result.statusCode}）\n                        \u003c/summary\u003e\n                        \u003cpre style\u003d{{\n                          margin: 0,\n                          background: \u0027#f5f5f5\u0027,\n                          padding: 12,\n                          borderRadius: 4,\n                          maxHeight: 300,\n                          overflow: \u0027auto\u0027,\n                        }}\u003e\n                          {result.responseBody}\n                        \u003c/pre\u003e\n                      \u003c/details\u003e\n                    ) : (\n                      \u003cdiv style\u003d{{ color: \u0027#ff4d4f\u0027 }}\u003e\n                        错误信息: {result.error}\n                      \u003c/div\u003e\n                    )}\n                  \u003c/div\u003e\n                }\n                type\u003d{\n                  result.success\n                    ? (result.validation?.passed ? \u0027success\u0027 : \u0027warning\u0027)\n                    : \u0027error\u0027\n                }\n                closable\n                onClose\u003d{() \u003d\u003e {\n                  setResult(null);\n                  setTaskPassed(false);\n                }",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 45
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/stores/useAppStore.ts",
+      "timestamp": 1762273645159,
+      "startOffset": 977,
+      "endOffset": 1205,
+      "codeContent": "\n  // 游戏化操作\n  completeTask: (taskId: string, experience: number) \u003d\u003e void;\n  unlockAchievement: (achievementId: string) \u003d\u003e void;\n  resetTask: (taskId: string) \u003d\u003e void;\n  resetAllTasks: () \u003d\u003e void;\n  resetAllProgress: () \u003d\u003e void;\n",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 8
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/src/stores/useAppStore.ts",
+      "timestamp": 1762273660190,
+      "startOffset": 3355,
+      "endOffset": 4107,
+      "codeContent": "\n      resetTask: (taskId) \u003d\u003e\n        set((state) \u003d\u003e ({\n          gamification: {\n            ...state.gamification,\n            completedTasks: state.gamification.completedTasks.filter(id \u003d\u003e id !\u003d\u003d taskId),\n          },\n        })),\n\n      resetAllTasks: () \u003d\u003e\n        set((state) \u003d\u003e ({\n          gamification: {\n            ...state.gamification,\n            completedTasks: [],\n          },\n        })),\n\n      resetAllProgress: () \u003d\u003e\n        set((state) \u003d\u003e ({\n          gamification: {\n            level: 1,\n            experience: 0,\n            completedTasks: [],\n            achievements: [],\n          },\n        })),\n\n      // UI 操作\n      toggleSidebar: () \u003d\u003e\n        set((state) \u003d\u003e ({\n          sidebarOpen: !state.sidebarOpen,\n        })),\n",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 33
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/[id]/page.tsx",
+      "timestamp": 1762273705263,
+      "startOffset": 4341,
+      "endOffset": 4825,
+      "codeContent": "和重置按钮 */}\n        \u003cdiv style\u003d{{ display: \u0027flex\u0027, justifyContent: \u0027space-between\u0027, alignItems: \u0027center\u0027 }}\u003e\n          \u003cLink href\u003d\"/tasks\"\u003e\n            \u003cButton icon\u003d{\u003cArrowLeftOutlined /\u003e}\u003e\n              返回任务列表\n            \u003c/Button\u003e\n          \u003c/Link\u003e\n\n          {isCompleted \u0026\u0026 (\n            \u003cButton\n              danger\n              onClick\u003d{handleReset}\n              style\u003d{{ marginLeft: \u0027auto\u0027 }}\n            \u003e\n              🔄 重置任务\n            \u003c/Button\u003e\n          )}\n        \u003c/div",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 18
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273720288,
+      "startOffset": 127,
+      "endOffset": 332,
+      "codeContent": ", Modal, App } from \u0027antd\u0027;\nimport {\n  PlusOutlined,\n  SearchOutlined,\n  EditOutlined,\n  DeleteOutlined,\n  TrophyOutlined,\n  FireOutlined,\n  CheckCircleOutlined,\n  LockOutlined,\n  ReloadOutlined,\n  Warning",
+      "aiProbability": 90,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 12
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273742052,
+      "startOffset": 1199,
+      "endOffset": 2754,
+      "codeContent": "message, modal } \u003d App.useApp();\n  const { gamification, esConnections, activeConnectionId, resetAllTasks, resetAllProgress } \u003d useAppStore();\n  const [activeTab, setActiveTab] \u003d useState(\u0027all\u0027);\n\n  const hasConnection \u003d esConnections.length \u003e 0 \u0026\u0026 activeConnectionId;\n  const completedTasksCount \u003d gamification.completedTasks.length;\n  const totalTasks \u003d tasks.length;\n  const progress \u003d (completedTasksCount / totalTasks) * 100;\n\n  const isTaskCompleted \u003d (taskId: string) \u003d\u003e {\n    return gamification.completedTasks.includes(taskId);\n  };\n\n  const handleResetAllTasks \u003d () \u003d\u003e {\n    modal.confirm({\n      title: \u0027🔄 重置所有任务\u0027,\n      icon: \u003cWarningOutlined /\u003e,\n      content: \u0027确定要重置所有任务吗？这将清除所有任务的完成状态，但保留你的等级和经验值。\u0027,\n      okText: \u0027确定重置\u0027,\n      cancelText: \u0027取消\u0027,\n      okButtonProps: { danger: true },\n      onOk: () \u003d\u003e {\n        resetAllTasks();\n        message.success(\u0027所有任务已重置！\u0027);\n      },\n    });\n  };\n\n  const handleResetAllProgress \u003d () \u003d\u003e {\n    modal.confirm({\n      title: \u0027⚠️ 重置所有进度\u0027,\n      icon: \u003cWarningOutlined style\u003d{{ color: \u0027#ff4d4f\u0027 }} /\u003e,\n      content: (\n        \u003cdiv\u003e\n          \u003cp\u003e确定要重置所有进度吗？这将清除：\u003c/p\u003e\n          \u003cul\u003e\n            \u003cli\u003e所有任务完成状态\u003c/li\u003e\n            \u003cli\u003e等级（重置为 1 级）\u003c/li\u003e\n            \u003cli\u003e经验值（重置为 0）\u003c/li\u003e\n            \u003cli\u003e所有成就\u003c/li\u003e\n          \u003c/ul\u003e\n          \u003cp style\u003d{{ color: \u0027#ff4d4f\u0027, fontWeight: \u0027bold\u0027 }}\u003e此操作不可恢复！\u003c/p\u003e\n        \u003c/div\u003e\n      ),\n      okText: \u0027确定重置\u0027,\n      cancelText: \u0027取消\u0027,\n      okButtonProps: { danger: true },\n      onOk: () \u003d\u003e {\n        resetAllProgress();\n        message.success(\u0027所有进度已重置！\u0027);\n      },\n    }",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 52
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273757066,
+      "startOffset": 6343,
+      "endOffset": 7340,
+      "codeContent": "\n                    percent\u003d{progress}\n                    strokeColor\u003d\"#fff\"\n                    trailColor\u003d\"rgba(255,255,255,0.3)\"\n                    showInfo\u003d{false}\n                  /\u003e\n                  \u003cText style\u003d{{ color: \u0027white\u0027, fontSize: 14 }}\u003e\n                    已完成 {completedTasksCount} / {totalTasks} 个任务\n                  \u003c/Text\u003e\n                \u003c/Space\u003e\n              \u003c/Card\u003e\n            \u003c/Col\u003e\n          \u003c/Row\u003e\n\n          {/* 重置按钮 */}\n          {completedTasksCount \u003e 0 \u0026\u0026 (\n            \u003cdiv style\u003d{{ marginTop: 16, display: \u0027flex\u0027, gap: 8, justifyContent: \u0027flex-end\u0027 }}\u003e\n              \u003cButton\n                icon\u003d{\u003cReloadOutlined /\u003e}\n                onClick\u003d{handleResetAllTasks}\n              \u003e\n                重置所有任务\n              \u003c/Button\u003e\n              \u003cButton\n                danger\n                icon\u003d{\u003cWarningOutlined /\u003e}\n                onClick\u003d{handleResetAllProgress}\n              \u003e\n                重置所有进度\n              \u003c/Button\u003e\n            \u003c/div\u003e\n          )}",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 32
+    },
+    {
+      "filePath": "/Users/shuyixiao/IdeaProjects/ElastiQuest/frontend/app/tasks/page.tsx",
+      "timestamp": 1762273785295,
+      "startOffset": 2771,
+      "endOffset": 5932,
+      "codeContent": "handleResetTask \u003d (taskId: string, taskTitle: string, e: React.MouseEvent) \u003d\u003e {\n    e.stopPropagation();\n    modal.confirm({\n      title: \u0027重置任务\u0027,\n      content: `确定要重置任务\"${taskTitle}\"吗？`,\n      okText: \u0027确定\u0027,\n      cancelText: \u0027取消\u0027,\n      onOk: () \u003d\u003e {\n        const { resetTask } \u003d useAppStore.getState();\n        resetTask(taskId);\n        message.success(\u0027任务已重置！\u0027);\n      },\n    });\n  };\n\n  const renderTaskCard \u003d (task: any) \u003d\u003e {\n    const completed \u003d isTaskCompleted(task.id);\n\n    return (\n      \u003cCard\n        key\u003d{task.id}\n        hoverable\n        style\u003d{{\n          marginBottom: 16,\n          border: completed ? \u00272px solid #52c41a\u0027 : \u00271px solid #d9d9d9\u0027,\n          opacity: !hasConnection ? 0.6 : 1,\n        }}\n      \u003e\n        \u003cdiv style\u003d{{ display: \u0027flex\u0027, justifyContent: \u0027space-between\u0027, alignItems: \u0027flex-start\u0027 }}\u003e\n          \u003cdiv style\u003d{{ flex: 1 }}\u003e\n            \u003cSpace direction\u003d\"vertical\" size\u003d\"small\" style\u003d{{ width: \u0027100%\u0027 }}\u003e\n              \u003cdiv style\u003d{{ display: \u0027flex\u0027, alignItems: \u0027center\u0027, gap: 8 }}\u003e\n                \u003cspan style\u003d{{ fontSize: 24 }}\u003e\n                  {categoryIcons[task.category]}\n                \u003c/span\u003e\n                \u003cTitle level\u003d{4} style\u003d{{ margin: 0 }}\u003e\n                  {task.title}\n                  {completed \u0026\u0026 (\n                    \u003cCheckCircleOutlined\n                      style\u003d{{ color: \u0027#52c41a\u0027, marginLeft: 8 }}\n                    /\u003e\n                  )}\n                \u003c/Title\u003e\n              \u003c/div\u003e\n\n              \u003cParagraph type\u003d\"secondary\" style\u003d{{ margin: 0 }}\u003e\n                {task.description}\n              \u003c/Paragraph\u003e\n\n              \u003cSpace\u003e\n                \u003cTag color\u003d{categoryColors[task.category]}\u003e\n                  {categoryNames[task.category]}\n                \u003c/Tag\u003e\n                \u003cTag color\u003d{difficultyColors[task.difficulty]}\u003e\n                  {difficultyNames[task.difficulty]}\n                \u003c/Tag\u003e\n                \u003cTag icon\u003d{\u003cFireOutlined /\u003e} color\u003d\"orange\"\u003e\n                  +{task.experience} EXP\n                \u003c/Tag\u003e\n              \u003c/Space\u003e\n            \u003c/Space\u003e\n          \u003c/div\u003e\n\n          \u003cdiv style\u003d{{ marginLeft: 16 }}\u003e\n            \u003cSpace direction\u003d\"vertical\" size\u003d\"small\"\u003e\n              {!hasConnection ? (\n                \u003cButton\n                  icon\u003d{\u003cLockOutlined /\u003e}\n                  disabled\n                \u003e\n                  需要配置 ES\n                \u003c/Button\u003e\n              ) : completed ? (\n                \u003c\u003e\n                  \u003cLink href\u003d{`/tasks/${task.id}`}\u003e\n                    \u003cButton type\u003d\"default\" icon\u003d{\u003cCheckCircleOutlined /\u003e} block\u003e\n                      查看详情\n                    \u003c/Button\u003e\n                  \u003c/Link\u003e\n                  \u003cButton\n                    size\u003d\"small\"\n                    icon\u003d{\u003cReloadOutlined /\u003e}\n                    onClick\u003d{(e) \u003d\u003e handleResetTask(task.id, task.title, e)}\n                    block\n                  \u003e\n                    重新挑战\n                  \u003c/Button\u003e\n                \u003c/\u003e\n              ) : (\n                \u003cLink href\u003d{`/tasks/${task.id}`}\u003e\n                  \u003cButton type\u003d\"primary\"\u003e\n                    开始任务\n                  \u003c/Button\u003e\n                \u003c/Link\u003e\n              )}\n            \u003c/Space\u003e",
+      "aiProbability": 70,
+      "aiTool": "AI Assistant",
+      "detectionMethod": "REALTIME_SPEED_ANALYSIS",
+      "lineCount": 96
     }
   ],
   "toolStats": {
     "AI Assistant": {
-      "usageCount": 8,
-      "totalLines": 784
+      "usageCount": 27,
+      "totalLines": 1433
     }
   }
 }

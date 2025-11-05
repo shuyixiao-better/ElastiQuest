@@ -8,9 +8,13 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8">
+    <div style={{ minHeight: 'calc(100vh - 64px)' }} className="flex flex-col items-center justify-center p-8">
       <div className="max-w-4xl w-full text-center">
-        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-6xl font-bold mb-6" style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}>
           ElastiQuest
         </h1>
         <p className="text-2xl text-gray-600 mb-8">

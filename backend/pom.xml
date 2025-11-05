@@ -49,7 +49,14 @@
             <artifactId>elasticsearch-java</artifactId>
             <version>${elasticsearch.version}</version>
         </dependency>
-        
+
+        <!-- Elasticsearch REST Client (用于连接测试) -->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+
         <!-- Jackson Databind (Elasticsearch Java Client 需要) -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
