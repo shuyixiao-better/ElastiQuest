@@ -9,7 +9,6 @@ import { ESConnectionConfig, useAppStore } from '@/stores/useAppStore';
 import Link from 'next/link';
 
 const { Title, Paragraph } = Typography;
-const { TabPane } = Tabs;
 
 export default function ConfigPage() {
   const [activeTab, setActiveTab] = useState('list');
@@ -74,41 +73,45 @@ export default function ConfigPage() {
           />
         )}
 
-        <Tabs activeKey={activeTab} onChange={(key) => {
-          setActiveTab(key);
-          if (key === 'list') {
-            setEditingConfig(null);
-          }
-        }}>
-          <TabPane
-            tab={
-              <span>
-                <UnorderedListOutlined />
-                连接列表
-              </span>
+        <Tabs
+          activeKey={activeTab}
+          onChange={(key) => {
+            setActiveTab(key);
+            if (key === 'list') {
+              setEditingConfig(null);
             }
-            key="list"
-          >
-            <ESConnectionList onEdit={handleEdit} />
-          </TabPane>
-          <TabPane
-            tab={
-              <span>
-                <DatabaseOutlined />
-                {editingConfig ? '编辑连接' : '添加连接'}
-              </span>
+          }}
+          items={[
+            {
+              key: 'list',
+              label: (
+                <span>
+                  <UnorderedListOutlined />
+                  连接列表
+                </span>
+              ),
+              children: <ESConnectionList onEdit={handleEdit} />
+            },
+            {
+              key: 'add',
+              label: (
+                <span>
+                  <DatabaseOutlined />
+                  {editingConfig ? '编辑连接' : '添加连接'}
+                </span>
+              ),
+              children: (
+                <Card>
+                  <ESConnectionForm
+                    onSuccess={handleAddSuccess}
+                    editingConfig={editingConfig}
+                    onCancelEdit={handleCancelEdit}
+                  />
+                </Card>
+              )
             }
-            key="add"
-          >
-            <Card>
-              <ESConnectionForm
-                onSuccess={handleAddSuccess}
-                editingConfig={editingConfig}
-                onCancelEdit={handleCancelEdit}
-              />
-            </Card>
-          </TabPane>
-        </Tabs>
+          ]}
+        />
       </Space>
     </div>
   );

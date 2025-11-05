@@ -19,7 +19,6 @@ import { tasks, tasksByCategory } from '@/data/tasks';
 import { useAppStore } from '@/stores/useAppStore';
 
 const { Title, Paragraph, Text } = Typography;
-const { TabPane } = Tabs;
 
 const categoryIcons = {
   create: <PlusOutlined />,
@@ -290,51 +289,53 @@ export default function TasksPage() {
         )}
 
         {/* 任务列表 */}
-        <Tabs activeKey={activeTab} onChange={setActiveTab}>
-          <TabPane tab="全部任务" key="all">
-            {tasks.map(renderTaskCard)}
-          </TabPane>
-          <TabPane 
-            tab={
-              <span>
-                <PlusOutlined /> 创建
-              </span>
-            } 
-            key="create"
-          >
-            {tasksByCategory.create.map(renderTaskCard)}
-          </TabPane>
-          <TabPane 
-            tab={
-              <span>
-                <SearchOutlined /> 读取
-              </span>
-            } 
-            key="read"
-          >
-            {tasksByCategory.read.map(renderTaskCard)}
-          </TabPane>
-          <TabPane 
-            tab={
-              <span>
-                <EditOutlined /> 更新
-              </span>
-            } 
-            key="update"
-          >
-            {tasksByCategory.update.map(renderTaskCard)}
-          </TabPane>
-          <TabPane 
-            tab={
-              <span>
-                <DeleteOutlined /> 删除
-              </span>
-            } 
-            key="delete"
-          >
-            {tasksByCategory.delete.map(renderTaskCard)}
-          </TabPane>
-        </Tabs>
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          items={[
+            {
+              key: 'all',
+              label: '全部任务',
+              children: tasks.map(renderTaskCard)
+            },
+            {
+              key: 'create',
+              label: (
+                <span>
+                  <PlusOutlined /> 创建
+                </span>
+              ),
+              children: tasksByCategory.create.map(renderTaskCard)
+            },
+            {
+              key: 'read',
+              label: (
+                <span>
+                  <SearchOutlined /> 读取
+                </span>
+              ),
+              children: tasksByCategory.read.map(renderTaskCard)
+            },
+            {
+              key: 'update',
+              label: (
+                <span>
+                  <EditOutlined /> 更新
+                </span>
+              ),
+              children: tasksByCategory.update.map(renderTaskCard)
+            },
+            {
+              key: 'delete',
+              label: (
+                <span>
+                  <DeleteOutlined /> 删除
+                </span>
+              ),
+              children: tasksByCategory.delete.map(renderTaskCard)
+            }
+          ]}
+        />
       </Space>
     </div>
   );
