@@ -33,3 +33,6 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+
+# AI 代码跟踪
+.ai-code-tracking.json
