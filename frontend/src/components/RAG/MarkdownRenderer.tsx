@@ -5,34 +5,18 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
-import { HighlightSegment } from '@/lib/api/ragChat';
 import 'highlight.js/styles/github.css';
 
-interface HighlightedTextProps {
-  segments: HighlightSegment[];
+interface MarkdownRendererProps {
+  content: string;
   className?: string;
 }
 
 /**
- * 高亮文本组件
- * 显示带有高亮标记的文本，支持 Markdown 渲染
+ * Markdown 渲染组件
+ * 支持 GFM (GitHub Flavored Markdown)、代码高亮、表格等
  */
-export default function HighlightedText({ segments, className = '' }: HighlightedTextProps) {
-  if (!segments || segments.length === 0) {
-    return null;
-  }
-
-  // 将片段重新组合成带有高亮标记的 Markdown
-  const markdownContent = segments
-    .map((segment) => {
-      if (segment.highlighted) {
-        // 使用 HTML mark 标签包裹高亮内容
-        return `<mark class="highlight-mark">${segment.text}</mark>`;
-      }
-      return segment.text;
-    })
-    .join('');
-
+export default function MarkdownRenderer({ content, className = '' }: MarkdownRendererProps) {
   return (
     <div className={`markdown-body ${className}`}>
       <ReactMarkdown
@@ -40,7 +24,7 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
         rehypePlugins={[rehypeHighlight, rehypeRaw]}
         components={{
           // 自定义代码块样式
-          code({ node, inline, className, children, ...props }: any) {
+          code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline ? (
               <pre className={className}>
@@ -55,7 +39,7 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
             );
           },
           // 自定义表格样式
-          table({ children }: any) {
+          table({ children }) {
             return (
               <div className="table-wrapper">
                 <table>{children}</table>
@@ -63,7 +47,7 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
             );
           },
           // 自定义链接样式
-          a({ children, href }: any) {
+          a({ children, href }) {
             return (
               <a href={href} target="_blank" rel="noopener noreferrer">
                 {children}
@@ -72,7 +56,7 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           },
         }}
       >
-        {markdownContent}
+        {content}
       </ReactMarkdown>
 
       <style jsx global>{`
@@ -82,18 +66,6 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           color: #24292e;
         }
 
-        /* 高亮标记样式 */
-        .markdown-body .highlight-mark,
-        .markdown-body mark.highlight-mark {
-          background-color: #fff3cd;
-          color: #856404;
-          padding: 2px 6px;
-          border-radius: 3px;
-          font-weight: 500;
-          border: 1px solid #ffeaa7;
-        }
-
-        /* 标题样式 */
         .markdown-body h1,
         .markdown-body h2,
         .markdown-body h3,
@@ -104,12 +76,11 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           margin-bottom: 16px;
           font-weight: 600;
           line-height: 1.25;
-          color: #1a1a1a;
         }
 
         .markdown-body h1 {
           font-size: 2em;
-          border-bottom: 2px solid #eaecef;
+          border-bottom: 1px solid #eaecef;
           padding-bottom: 0.3em;
         }
 
@@ -124,25 +95,14 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
         }
 
         .markdown-body h4 {
-          font-size: 1.1em;
-        }
-
-        .markdown-body h5 {
           font-size: 1em;
         }
 
-        .markdown-body h6 {
-          font-size: 0.9em;
-          color: #6a737d;
-        }
-
-        /* 段落样式 */
         .markdown-body p {
           margin-top: 0;
           margin-bottom: 16px;
         }
 
-        /* 列表样式 */
         .markdown-body ul,
         .markdown-body ol {
           margin-top: 0;
@@ -158,44 +118,22 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           margin-bottom: 0.5em;
         }
 
-        .markdown-body ul ul,
-        .markdown-body ul ol,
-        .markdown-body ol ol,
-        .markdown-body ol ul {
-          margin-top: 0;
-          margin-bottom: 0;
-        }
-
-        /* 引用样式 */
         .markdown-body blockquote {
           margin: 0 0 16px 0;
           padding: 0 1em;
           color: #6a737d;
           border-left: 4px solid #dfe2e5;
-          background-color: #f6f8fa;
         }
 
-        .markdown-body blockquote > :first-child {
-          margin-top: 0;
-        }
-
-        .markdown-body blockquote > :last-child {
-          margin-bottom: 0;
-        }
-
-        /* 行内代码样式 */
-        .markdown-body code.inline-code,
-        .markdown-body :not(pre) > code {
+        .markdown-body code.inline-code {
           padding: 0.2em 0.4em;
           margin: 0;
           font-size: 85%;
           background-color: rgba(27, 31, 35, 0.05);
           border-radius: 3px;
           font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-          color: #e83e8c;
         }
 
-        /* 代码块样式 */
         .markdown-body pre {
           padding: 16px;
           overflow: auto;
@@ -204,7 +142,6 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           background-color: #f6f8fa;
           border-radius: 6px;
           margin-bottom: 16px;
-          border: 1px solid #e1e4e8;
         }
 
         .markdown-body pre code {
@@ -216,10 +153,8 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           background-color: transparent;
           border: 0;
           font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-          color: inherit;
         }
 
-        /* 表格样式 */
         .markdown-body .table-wrapper {
           overflow-x: auto;
           margin-bottom: 16px;
@@ -229,19 +164,17 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           border-spacing: 0;
           border-collapse: collapse;
           width: 100%;
-          margin-bottom: 16px;
         }
 
         .markdown-body table th,
         .markdown-body table td {
-          padding: 8px 13px;
+          padding: 6px 13px;
           border: 1px solid #dfe2e5;
         }
 
         .markdown-body table th {
           font-weight: 600;
           background-color: #f6f8fa;
-          text-align: left;
         }
 
         .markdown-body table tr {
@@ -250,10 +183,9 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
         }
 
         .markdown-body table tr:nth-child(2n) {
-          background-color: #f9f9f9;
+          background-color: #f6f8fa;
         }
 
-        /* 链接样式 */
         .markdown-body a {
           color: #0366d6;
           text-decoration: none;
@@ -263,7 +195,6 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           text-decoration: underline;
         }
 
-        /* 分割线样式 */
         .markdown-body hr {
           height: 0.25em;
           padding: 0;
@@ -272,31 +203,12 @@ export default function HighlightedText({ segments, className = '' }: Highlighte
           border: 0;
         }
 
-        /* 粗体和斜体 */
         .markdown-body strong {
           font-weight: 600;
         }
 
         .markdown-body em {
           font-style: italic;
-        }
-
-        /* 删除线 */
-        .markdown-body del {
-          text-decoration: line-through;
-        }
-
-        /* 任务列表 */
-        .markdown-body input[type='checkbox'] {
-          margin-right: 0.5em;
-        }
-
-        /* 图片样式 */
-        .markdown-body img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 4px;
-          margin: 16px 0;
         }
       `}</style>
     </div>

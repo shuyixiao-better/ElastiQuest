@@ -6,6 +6,7 @@ import type { CollapseProps } from 'antd';
 import { SendOutlined, ClearOutlined, SettingOutlined, FileTextOutlined } from '@ant-design/icons';
 import { streamRAGChat, HighlightSegment } from '@/lib/api/ragChat';
 import HighlightedText from './HighlightedText';
+import MarkdownRenderer from './MarkdownRenderer';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -217,27 +218,30 @@ export default function RAGChatPanel() {
             extra={
               showHighlights && (
                 <Text type="secondary">
-                  <mark style={{ backgroundColor: '#fff3cd', padding: '2px 6px', borderRadius: '3px' }}>
+                  <mark style={{ backgroundColor: '#fff3cd', padding: '2px 6px', borderRadius: '3px', border: '1px solid #ffeaa7' }}>
                     高亮部分
                   </mark>
                   {' '}表示引用了参考资料
                 </Text>
               )
             }
+            style={{ backgroundColor: '#fff' }}
           >
             {loading && !answer && (
               <Spin spinning={true} tip="正在生成回答..." size="large">
                 <div style={{ padding: '40px', minHeight: '100px' }} />
               </Spin>
             )}
-            
+
             {showHighlights && highlights.length > 0 ? (
               <HighlightedText segments={highlights} />
             ) : (
-              <div style={{ whiteSpace: 'pre-wrap', minHeight: '100px' }}>
-                {answer}
-                {loading && <span className="cursor">▊</span>}
-              </div>
+              answer && (
+                <div style={{ minHeight: '100px' }}>
+                  <MarkdownRenderer content={answer} />
+                  {loading && <span className="cursor">▊</span>}
+                </div>
+              )
             )}
           </Card>
         )}
