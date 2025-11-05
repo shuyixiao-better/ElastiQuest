@@ -160,6 +160,13 @@ export const useAppStore = create<AppState & AppActions>()(
     }),
     {
       name: 'elasticquest-store', // localStorage 键名
+      skipHydration: false,
+      partialize: (state) => ({
+        esConnections: state.esConnections,
+        activeConnectionId: state.activeConnectionId,
+        gamification: state.gamification,
+        theme: state.theme,
+      }),
     }
   )
 );

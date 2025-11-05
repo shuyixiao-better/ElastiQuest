@@ -6,7 +6,13 @@ import { ReactNode } from 'react';
 
 export default function AntdProvider({ children }: { children: ReactNode }) {
   return (
-    <ConfigProvider locale={zhCN}>
+    <ConfigProvider
+      locale={zhCN}
+      theme={{
+        cssVar: true,
+        hashed: false,
+      }}
+    >
       <App>
         {children}
       </App>
