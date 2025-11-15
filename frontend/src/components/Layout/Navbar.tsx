@@ -1,7 +1,7 @@
 'use client';
 
 import { Layout, Button, Badge } from 'antd';
-import { HomeOutlined, DatabaseOutlined, BookOutlined, CheckCircleOutlined, RobotOutlined } from '@ant-design/icons';
+import { HomeOutlined, DatabaseOutlined, BookOutlined, CheckCircleOutlined, RobotOutlined, TrophyOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppStore } from '@/stores/useAppStore';
@@ -20,6 +20,13 @@ export default function Navbar() {
       icon: <HomeOutlined style={{ fontSize: '20px' }} />,
       label: '首页',
       href: '/',
+    },
+    {
+      key: '/exam',
+      icon: <TrophyOutlined style={{ fontSize: '20px' }} />,
+      label: 'ES认证考试',
+      href: '/exam',
+      highlight: true,
     },
     {
       key: '/config',
@@ -77,6 +84,7 @@ export default function Navbar() {
         }}>
           {navItems.map((item) => {
             const isActive = pathname === item.key;
+            const isHighlight = item.highlight && !isActive;
             return (
               <Link key={item.key} href={item.href} style={{ textDecoration: 'none' }}>
                 <Button
@@ -94,12 +102,19 @@ export default function Navbar() {
                     height: '48px',
                     padding: '0 24px',
                     fontSize: '16px',
-                    fontWeight: isActive ? 'bold' : 'normal',
+                    fontWeight: isActive || isHighlight ? 'bold' : 'normal',
                     background: isActive
                       ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                      : 'transparent',
-                    border: isActive ? 'none' : '1px solid #d9d9d9',
-                    boxShadow: isActive ? '0 2px 8px rgba(102, 126, 234, 0.3)' : 'none',
+                      : isHighlight
+                        ? 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)'
+                        : 'transparent',
+                    color: isActive || isHighlight ? '#fff' : undefined,
+                    border: isActive || isHighlight ? 'none' : '1px solid #d9d9d9',
+                    boxShadow: isActive
+                      ? '0 2px 8px rgba(102, 126, 234, 0.3)'
+                      : isHighlight
+                        ? '0 2px 8px rgba(251, 191, 36, 0.3)'
+                        : 'none',
                   }}
                 >
                   {item.label}

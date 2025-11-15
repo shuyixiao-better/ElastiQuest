@@ -32,17 +32,17 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200">
-            <h3 className="text-xl font-semibold mb-3">🎮 游戏化</h3>
+          <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200 bg-gradient-to-br from-yellow-50 to-orange-50">
+            <h3 className="text-xl font-semibold mb-3">🎓 认证考试</h3>
             <p className="text-gray-600">
-              完成任务获得经验值，解锁成就徽章
+              ES认证工程师考试学习系统
             </p>
           </div>
 
           <div className="p-6 bg-white rounded-lg shadow-md border border-gray-200">
-            <h3 className="text-xl font-semibold mb-3">🔍 可视化</h3>
+            <h3 className="text-xl font-semibold mb-3">🎮 游戏化</h3>
             <p className="text-gray-600">
-              直观的查询构建器和结果展示
+              完成任务获得经验值，解锁成就徽章
             </p>
           </div>
 
@@ -55,6 +55,12 @@ export default function HomePage() {
         </div>
         
         <div className="flex gap-4 justify-center flex-wrap">
+          <Link
+            href="/exam"
+            className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg font-semibold"
+          >
+            🎓 ES认证考试学习
+          </Link>
           <Link
             href="/tasks"
             className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
