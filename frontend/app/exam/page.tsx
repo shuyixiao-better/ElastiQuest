@@ -11,7 +11,9 @@ import {
 } from '@ant-design/icons';
 import { ExamDashboard } from '@/components/Exam/ExamDashboard';
 import { TopicList } from '@/components/Exam/TopicList';
+import { TopicDetail } from '@/components/Exam/TopicDetail';
 import { LevelMap } from '@/components/Exam/LevelMap';
+import { LevelDetail } from '@/components/Exam/LevelDetail';
 import { MockExam } from '@/components/Exam/MockExam';
 
 const { Header, Content, Sider } = Layout;
@@ -48,18 +50,36 @@ export default function ExamPage() {
   ];
 
   const renderContent = () => {
+    // 如果选择了知识点，显示知识点详情
+    if (selectedTopic) {
+      return (
+        <TopicDetail 
+          topicId={selectedTopic} 
+          onBack={() => setSelectedTopic(null)} 
+        />
+      );
+    }
+
+    // 如果选择了关卡，显示关卡详情
+    if (selectedLevel) {
+      return (
+        <LevelDetail 
+          levelId={selectedLevel} 
+          onBack={() => setSelectedLevel(null)} 
+        />
+      );
+    }
+
     switch (selectedMenu) {
       case 'dashboard':
         return <ExamDashboard />;
       case 'topics':
         return <TopicList onSelectTopic={(topicId) => {
           setSelectedTopic(topicId);
-          // 这里可以跳转到知识点详情页
         }} />;
       case 'levels':
         return <LevelMap onStartLevel={(levelId) => {
           setSelectedLevel(levelId);
-          // 这里可以跳转到关卡详情页
         }} />;
       case 'mock-exam':
         return <MockExam />;
