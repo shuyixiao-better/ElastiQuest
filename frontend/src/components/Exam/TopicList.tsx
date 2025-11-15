@@ -13,7 +13,6 @@ import { examTopics, categoryInfo, ExamCategory } from '@/data/examTopics';
 import { useExamStore } from '@/stores/useExamStore';
 
 const { Text, Title } = Typography;
-const { Search } = Input;
 
 export const TopicList: React.FC<{ onSelectTopic: (topicId: string) => void }> = ({ onSelectTopic }) => {
   const { userProgress } = useExamStore();
@@ -131,7 +130,7 @@ export const TopicList: React.FC<{ onSelectTopic: (topicId: string) => void }> =
               <Progress 
                 type="circle" 
                 percent={Math.round(progress)} 
-                width={60}
+                size={60}
                 strokeColor={catInfo.color}
               />
             }
