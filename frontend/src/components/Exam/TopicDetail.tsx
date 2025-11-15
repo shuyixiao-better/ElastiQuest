@@ -15,7 +15,6 @@ import { useExamStore } from '@/stores/useExamStore';
 import { ChallengeView } from './ChallengeView';
 
 const { Title, Text, Paragraph } = Typography;
-const { Panel } = Collapse;
 
 interface TopicDetailProps {
   topicId: string;
@@ -215,26 +214,42 @@ export const TopicDetail: React.FC<TopicDetailProps> = ({ topicId, onBack }) => 
 
       {/* 学习资料 */}
       <Card title="📖 学习资料" style={{ marginBottom: 24 }}>
-        <Collapse>
-          <Panel header="基础概念" key="1">
-            <Paragraph>
-              这里可以添加详细的学习资料、文档链接、视频教程等。
-            </Paragraph>
-            <Paragraph>
-              建议先阅读 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch官方文档</a>
-            </Paragraph>
-          </Panel>
-          <Panel header="实践示例" key="2">
-            <Paragraph>
-              这里可以添加代码示例和实践案例。
-            </Paragraph>
-          </Panel>
-          <Panel header="常见问题" key="3">
-            <Paragraph>
-              这里可以添加常见问题和解答。
-            </Paragraph>
-          </Panel>
-        </Collapse>
+        <Collapse
+          items={[
+            {
+              key: '1',
+              label: '基础概念',
+              children: (
+                <>
+                  <Paragraph>
+                    这里可以添加详细的学习资料、文档链接、视频教程等。
+                  </Paragraph>
+                  <Paragraph>
+                    建议先阅读 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch官方文档</a>
+                  </Paragraph>
+                </>
+              )
+            },
+            {
+              key: '2',
+              label: '实践示例',
+              children: (
+                <Paragraph>
+                  这里可以添加代码示例和实践案例。
+                </Paragraph>
+              )
+            },
+            {
+              key: '3',
+              label: '常见问题',
+              children: (
+                <Paragraph>
+                  这里可以添加常见问题和解答。
+                </Paragraph>
+              )
+            }
+          ]}
+        />
       </Card>
 
       {/* 挑战列表 */}
