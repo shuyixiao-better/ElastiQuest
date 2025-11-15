@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Space, Typography, Tag, Progress, Modal, Result, Statistic, Row, Col } from 'antd';
+import { Card, Button, Space, Typography, Tag, Progress, Modal, Result, Statistic, Row, Col, App } from 'antd';
 import { 
   ClockCircleOutlined, 
   TrophyOutlined,
@@ -16,6 +16,7 @@ import { ChallengeView } from './ChallengeView';
 const { Title, Text, Paragraph } = Typography;
 
 export const MockExam: React.FC = () => {
+  const { modal } = App.useApp();
   const { currentSession, startExam, submitAnswer, endExam, updateTimeRemaining } = useExamStore();
   const [selectedExam, setSelectedExam] = useState<string | null>(null);
   const [currentChallengeIndex, setCurrentChallengeIndex] = useState(0);
@@ -42,7 +43,7 @@ export const MockExam: React.FC = () => {
     const exam = mockExams.find(e => e.id === examId);
     if (!exam) return;
 
-    Modal.confirm({
+    modal.confirm({
       title: '开始模拟考试',
       content: (
         <div>
@@ -123,7 +124,7 @@ export const MockExam: React.FC = () => {
       setCurrentChallengeIndex(currentChallengeIndex + 1);
     } else {
       // 最后一题，提示提交
-      Modal.confirm({
+      modal.confirm({
         title: '提交考试',
         content: '确定要提交考试吗？提交后将无法修改答案。',
         onOk: handleEndExam

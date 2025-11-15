@@ -68,7 +68,7 @@ export const TopicList: React.FC<{ onSelectTopic: (topicId: string) => void }> =
       {/* 筛选器 */}
       <Card style={{ marginBottom: 24 }}>
         <Space wrap size="middle" style={{ width: '100%' }}>
-          <Search
+          <Input
             placeholder="搜索知识点..."
             allowClear
             style={{ width: 300 }}
